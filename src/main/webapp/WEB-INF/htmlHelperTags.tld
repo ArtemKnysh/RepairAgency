@@ -1,0 +1,115 @@
+<taglib xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+        http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <tlib-version>1.1</tlib-version>
+    <short-name>htmlHelperTags</short-name>
+    <uri>http://com.epam.rd.java.basic.repairagency/lib</uri>
+
+    <tag>
+        <name>navItem</name>
+        <tag-class>com.epam.rd.java.basic.repairagency.web.tag.NavItemTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>href</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>text</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>active</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>selectRole</name>
+        <tag-class>com.epam.rd.java.basic.repairagency.web.tag.SelectUserRoleTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>role</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>selectStatus</name>
+        <tag-class>com.epam.rd.java.basic.repairagency.web.tag.SelectRepairRequestStatusTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>status</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <function>
+        <name>isRepairRequestStatusCanBeChangedByRole</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+        </function-class>
+        <function-signature>
+            boolean isRepairRequestStatusCanBeChangedByRole(
+            com.epam.rd.java.basic.repairagency.entity.RepairRequest,
+            java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>isRepairRequestCostCanBeChangedByRole</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+        </function-class>
+        <function-signature>
+            boolean isRepairRequestCostCanBeChangedByRole(
+            com.epam.rd.java.basic.repairagency.entity.RepairRequest,
+            java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>isRepairRequestCanBeCanceled</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+        </function-class>
+        <function-signature>
+            boolean isRepairRequestCanBeCanceled(
+            com.epam.rd.java.basic.repairagency.entity.RepairRequest)
+        </function-signature>
+    </function>
+    <function>
+        <name>isRepairRequestCanBeEdited</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+        </function-class>
+        <function-signature>
+            boolean isRepairRequestCanBeEdited(
+            com.epam.rd.java.basic.repairagency.entity.RepairRequest)
+        </function-signature>
+    </function>
+    <function>
+        <name>isRepairRequestMasterCanBeChangedByRole</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+        </function-class>
+        <function-signature>
+            boolean isRepairRequestMasterCanBeChangedByRole(
+            com.epam.rd.java.basic.repairagency.entity.RepairRequest,
+            java.lang.String)
+        </function-signature>
+    </function>
+    <function>
+        <name>isRepairRequestCanBePaidByCustomer</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+        </function-class>
+        <function-signature>
+            boolean isRepairRequestCanBePaidByRole(
+            com.epam.rd.java.basic.repairagency.entity.RepairRequest)
+        </function-signature>
+    </function>
+</taglib>

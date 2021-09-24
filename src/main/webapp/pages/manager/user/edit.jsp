@@ -1,0 +1,6 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<jsp:include page="/pages/common/layouts/user/edit.jsp">
+    <jsp:param name="title" value="Edit Manager Data"/>
+    <jsp:param name="userEditUrl" value="${initParam['managerUserEditUrl']}"/>
+</jsp:include>
