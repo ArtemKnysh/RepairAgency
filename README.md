@@ -37,3 +37,5 @@ Repair Agency is a Web Application developed to perform functionality of repair 
 3. Clone the project into IDE on your local machine
 4. Check database credentials in `src/main/webapp/META-INF/context.xml` and change username or password if needed
 5. Run the Web Application.
+## Entity Relationship Diagram
+![](imgs/ER-diagramm.png)
