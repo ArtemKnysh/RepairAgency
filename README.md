@@ -1,13 +1,13 @@
 # Repair Agency 
 Repair Agency is a Web Application developed to perform functionality of repair request management.
-##Tools and Technologies:
+## Tools and Technologies:
 * **Patterns**: MVC, Command, Factory, Singleton, Front-Controller, PRG
 * **Back-end**: JSP, JSTL, Java Servlets, JDBC
 * **Front-end**: HTML, CSS, Bootstrap4
 * **Database**: MySQL
 * **Libraries**: Reflections, Log4j, JUnit, Mockito
 * **Server**: Apache Tomcat
-##Features by Users role:
+## Features by Users role:
 * **Common** 
   * Authorization and Authentication
   * Internationalization
@@ -31,9 +31,9 @@ Repair Agency is a Web Application developed to perform functionality of repair 
   * View repair request and customer details
   * View repair requests, customers and feedbacks lists with sorting, filtering and pagination
   * Edit own user data
-##Building & Running the Project:
-  1. Install a server Apache Tomcat v8.X
-  2. Open MySQL in your workspace, initialize database from `mysql-sripts/init.sql` and start MySQL server
-  3. Clone the project into IDE on your local machine
-  4. Check database credentials in `src/main/webapp/META-INF/context.xml` and change username or password if needed
-  5. Run the Web Application.
+## Building & Running the Project:
+1. Install a server Apache Tomcat v8.X
+2. Open MySQL in your workspace, initialize database from `mysql-sripts/init.sql` and start MySQL server
+3. Clone the project into IDE on your local machine
+4. Check database credentials in `src/main/webapp/META-INF/context.xml` and change username or password if needed
+5. Run the Web Application.
