@@ -3,6 +3,7 @@ package com.epam.rd.java.basic.repairagency.service.impl;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.User;
+import com.epam.rd.java.basic.repairagency.entity.filtering.RepairRequestFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.RepairRequestSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
@@ -263,6 +264,61 @@ public class RepairRequestServiceImpl extends AbstractService<RepairRequest> imp
             return repository.findAllByMasterId(connection, masterId, offset, amount, sortingParam, sortingType);
         } catch (SQLException e) {
             throw new DBException("Can't find repair requests with masterId '" + masterId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<RepairRequest> findAll(int offset, int amount, RepairRequestSortingParameter sortingParam,
+                                       SortingType sortingType, RepairRequestFilterParameter filterParam,
+                                       String filterValue
+    ) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAll(connection, offset, amount, sortingParam, sortingType, filterParam, filterValue);
+        } catch (SQLException e) {
+            throw new DBException("Can't find repair requests in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfRepairRequests(RepairRequestFilterParameter filterParam, String filterValue) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfRepairRequests(connection, filterParam, filterValue);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of repair requests", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfRepairRequestsByCustomerId(long customerId, RepairRequestFilterParameter filterParam, String filterValue) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfRepairRequests(connection, customerId, filterParam, filterValue);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of repair requests with customerId '" + customerId + "'", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<RepairRequest> findAllByCustomerId(long customerId, int offset, int amount, RepairRequestSortingParameter sortingParam, SortingType sortingType, RepairRequestFilterParameter filterParam, String filterValue) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAllByCustomerId(connection, customerId, offset, amount, sortingParam, sortingType, filterParam, filterValue);
+        } catch (SQLException e) {
+            throw new DBException("Can't find repair requests with customerId '" + customerId + "' in DB", e);
         } finally {
             DBUtil.close(connection);
         }

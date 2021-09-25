@@ -58,7 +58,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     }
 
     @Override
-    protected List<User> parseResultSet(ResultSet rs) throws SQLException {
+    protected List<User> parseEntitiesFromResultSet(ResultSet rs) throws SQLException {
         List<User> result = new ArrayList<>();
         while (rs.next()) {
             User user = new User();
@@ -128,26 +128,10 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     public User findByEmailAndPassword(Connection connection, String email, String password) throws NotFoundException, SQLException {
         String sql = getSelectQuery();
         sql += " WHERE email = ? AND password = ?";
-        List<User> result;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
-            statement = connection.prepareStatement(sql);
-            int paramIndex = 0;
-            statement.setString(++paramIndex, email);
-            statement.setString(++paramIndex, password);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            if (result == null || result.size() == 0) {
-                throw new NotFoundException("User with email '" + email + "' and password wasn't found");
-            }
-            if (result.size() > 1) {
-                throw new SQLException("Received more than one record");
-            }
-            return result.get(0);
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
+            return findByQueryWithParameters(connection, sql, email, password);
+        } catch (NotFoundException nfe) {
+            throw new NotFoundException("User with email '" + email + "' and password wasn't found");
         }
     }
 
@@ -155,14 +139,14 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     public List<User> findAll(Connection connection) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE role_id != " + UserRole.ADMIN.getId() + " ORDER BY create_time DESC";
-        return findAllByQuery(connection, sql);
+        return findAllByQueryWithoutParameters(connection, sql);
     }
 
     @Override
     public List<User> findAllByRole(Connection connection, UserRole role) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE role_id = " + role.getId() + " ORDER BY create_time DESC";
-        return findAllByQuery(connection, sql);
+        return findAllByQueryWithoutParameters(connection, sql);
     }
 
     @Override
@@ -178,7 +162,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQuery(connection, query);
+        return findAllByQueryWithoutParameters(connection, query);
     }
 
     private String getRolesAsString(UserRole[] roles) {
@@ -192,7 +176,7 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
             String rolesAsString = getRolesAsString(roles);
             sql += " WHERE role_id NOT IN " + rolesAsString;
         }
-        return findIntValueByQuery(connection, sql);
+        return findIntValueByQueryWithoutParameters(connection, sql);
     }
 
     @Override
@@ -203,28 +187,13 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQuery(connection, query);
+        return findAllByQueryWithoutParameters(connection, query);
     }
 
     @Override
     public int findCountOfUsersByRole(Connection connection, UserRole role) throws SQLException {
         String sql = getSelectCountQuery();
         sql += " WHERE role_id = ?";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            int paramIndex = 0;
-            statement.setLong(++paramIndex, role.getId());
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else {
-                return 0;
-            }
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findIntValueByQueryWithParameters(connection, sql, role.getId());
     }
 }

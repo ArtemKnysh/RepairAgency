@@ -1,8 +1,10 @@
 package com.epam.rd.java.basic.repairagency.service;
 
+import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.User;
+import com.epam.rd.java.basic.repairagency.entity.filtering.RepairRequestFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.RepairRequestSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
@@ -53,4 +55,13 @@ public interface RepairRequestService extends GenericService<RepairRequest> {
                                           RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws DBException, NotFoundException;
 
+    List<RepairRequest> findAll(int offset, int amount, RepairRequestSortingParameter sortingParam,
+                                SortingType sortingType, RepairRequestFilterParameter filterParam, String filterValue
+    ) throws DBException, NotFoundException;
+
+    int findCountOfRepairRequests(RepairRequestFilterParameter filterParam, String filterValue) throws DBException;
+
+    int findCountOfRepairRequestsByCustomerId(long customerId, RepairRequestFilterParameter filterParam, String filterValue) throws DBException;
+
+    List<RepairRequest> findAllByCustomerId(long customerId, int offset, int amount, RepairRequestSortingParameter sortingParam, SortingType sortingType, RepairRequestFilterParameter filterParam, String filterValue) throws DBException, NotFoundException;
 }

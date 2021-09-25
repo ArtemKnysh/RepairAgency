@@ -51,7 +51,7 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
     }
 
     @Override
-    protected List<AccountTransaction> parseResultSet(ResultSet rs) throws SQLException {
+    protected List<AccountTransaction> parseEntitiesFromResultSet(ResultSet rs) throws SQLException {
         List<AccountTransaction> result = new ArrayList<>();
         while (rs.next()) {
             AccountTransaction accountTransaction = new AccountTransaction();
@@ -83,28 +83,14 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
     public double findSumOfAmountByUserId(Connection connection, long userId) throws SQLException {
         String sql = getSelectAmountSumQuery();
         sql += " WHERE user_id = ?;";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, userId);
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getDouble(1);
-            } else {
-                return 0;
-            }
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findDoubleValueByQueryWithParameters(connection, sql, userId);
     }
 
     @Override
     public List<AccountTransaction> findAllByUserId(Connection connection, long userId) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE user_id = ? ORDER BY create_time DESC;";
-        return findAllByQueryWithOneParameter(connection, sql, userId);
+        return findAllByQueryWithParameters(connection, sql, userId);
     }
 
     @Override
@@ -117,7 +103,7 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQueryWithOneParameter(connection, query, userId);
+        return findAllByQueryWithParameters(connection, query, userId);
     }
 
     @Override
@@ -134,7 +120,6 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
         } finally {
             DBUtil.close(statement);
         }
-
     }
 
 
@@ -142,22 +127,7 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
     public int findCountOfTransactionsByUserId(Connection connection, long userId) throws SQLException {
         String sql = getSelectCountQuery();
         sql += " WHERE user_id = ?";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            int paramIndex = 0;
-            statement.setLong(++paramIndex, userId);
-            resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            } else {
-                return 0;
-            }
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findIntValueByQueryWithParameters(connection, sql, userId);
     }
 
 }

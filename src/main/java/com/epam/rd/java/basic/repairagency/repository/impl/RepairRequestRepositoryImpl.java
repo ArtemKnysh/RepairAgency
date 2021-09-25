@@ -3,6 +3,7 @@ package com.epam.rd.java.basic.repairagency.repository.impl;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.User;
+import com.epam.rd.java.basic.repairagency.entity.filtering.RepairRequestFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.RepairRequestSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
@@ -81,7 +82,7 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
     }
 
     @Override
-    protected List<RepairRequest> parseResultSet(ResultSet rs) throws SQLException {
+    protected List<RepairRequest> parseEntitiesFromResultSet(ResultSet rs) throws SQLException {
         List<RepairRequest> repairRequests = new ArrayList<>();
         while (rs.next()) {
             RepairRequest repairRequest = new RepairRequest();
@@ -219,24 +220,9 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
 
     @Override
     public List<RepairRequest> findAllByCustomerId(Connection connection, long customerId) throws SQLException, NotFoundException {
-        List<RepairRequest> result;
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? ORDER BY create_time DESC;";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, customerId);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            for (RepairRequest repairRequest : result) {
-                findDefaultDependencies(connection, repairRequest);
-            }
-            return result;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findAllByQueryWithParameters(connection, sql, customerId);
     }
 
     @Override
@@ -244,65 +230,34 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
         List<RepairRequest> result;
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? ORDER BY create_time DESC;";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, masterId);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            for (RepairRequest repairRequest : result) {
-                findDefaultDependencies(connection, repairRequest);
-            }
-            return result;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findAllByQueryWithParameters(connection, sql, masterId);
     }
 
     @Override
     public List<RepairRequest> findAllByCustomerIdAndMasterIdAndStatusMoreThenStatusId(Connection connection, long customerId, long masterId, long statusId) throws SQLException, NotFoundException {
-        List<RepairRequest> result;
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? AND master_id = ? AND status_id > ? ORDER BY create_time DESC;";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, customerId);
-            statement.setLong(2, masterId);
-            statement.setLong(3, statusId);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            for (RepairRequest repairRequest : result) {
-                findDefaultDependencies(connection, repairRequest);
-            }
-            return result;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findAllByQueryWithParameters(connection, sql, customerId, masterId, statusId);
     }
 
     @Override
     public int findCountOfRepairRequests(Connection connection) throws SQLException {
         String sql = getSelectCountQuery();
-        return findIntValueByQuery(connection, sql);
+        return findIntValueByQueryWithoutParameters(connection, sql);
     }
 
     @Override
     public int findCountOfRepairRequestsByCustomerId(Connection connection, long customerId) throws SQLException {
         String sql = getSelectCountQuery();
         sql += " WHERE customer_id = ?";
-        return findIntValueByQueryWithOneParameter(connection, sql, customerId);
+        return findIntValueByQueryWithParameters(connection, sql, customerId);
     }
 
     @Override
     public int findCountOfRepairRequestsByMasterId(Connection connection, long masterId) throws SQLException {
         String sql = getSelectCountQuery();
         sql += " WHERE master_id = ?";
-        return findIntValueByQueryWithOneParameter(connection, sql, masterId);
+        return findIntValueByQueryWithParameters(connection, sql, masterId);
     }
 
     @Override
@@ -313,7 +268,7 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQuery(connection, query);
+        return findAllByQueryWithoutParameters(connection, query);
     }
 
     @Override
@@ -321,11 +276,11 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
                                                    RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException {
         String query = getSelectWithMasterAndCustomerFullNameQuery();
-        query += " WHERE rr.customer_id = ?";
+        query += " WHERE customer_id = ?";
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQueryWithOneParameter(connection, query, customerId);
+        return findAllByQueryWithParameters(connection, query, customerId);
     }
 
     @Override
@@ -333,10 +288,50 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
                                                  RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException {
         String query = getSelectWithMasterAndCustomerFullNameQuery();
-        query += " WHERE rr.master_id = ?";
+        query += " WHERE master_id = ?";
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQueryWithOneParameter(connection, query, masterId);
+        return findAllByQueryWithParameters(connection, query, masterId);
+    }
+
+    @Override
+    public List<RepairRequest> findAll(Connection connection, int offset, int amount,
+                                       RepairRequestSortingParameter sortingParam, SortingType sortingType,
+                                       RepairRequestFilterParameter filterParam, String filterValue
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithMasterAndCustomerFullNameQuery();
+        query += " WHERE " + filterParam.getColumnName() + " = ? ";
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQueryWithParameters(connection, query, filterParam.getValue(filterValue));
+    }
+
+    @Override
+    public int findCountOfRepairRequests(Connection connection, RepairRequestFilterParameter filterParam, String filterValue) throws SQLException {
+        String sql = getSelectCountQuery();
+        sql += " WHERE " + filterParam.getColumnName() + " = ? ";
+        return findIntValueByQueryWithParameters(connection, sql, filterParam.getValue(filterValue));
+    }
+
+    @Override
+    public int findCountOfRepairRequests(Connection connection, long customerId, RepairRequestFilterParameter filterParam, String filterValue) throws SQLException {
+        String sql = getSelectCountQuery();
+        sql += " WHERE customer_id = ? AND " + filterParam.getColumnName() + " = ? ";
+        return findIntValueByQueryWithParameters(connection, sql, customerId, filterParam.getValue(filterValue));
+    }
+
+    @Override
+    public List<RepairRequest> findAllByCustomerId(Connection connection, long customerId, int offset, int amount,
+                                                   RepairRequestSortingParameter sortingParam, SortingType sortingType,
+                                                   RepairRequestFilterParameter filterParam, String filterValue
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithMasterAndCustomerFullNameQuery();
+        query += " WHERE customer_id = ? AND " + filterParam.getColumnName() + " = ? ";
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQueryWithParameters(connection, query, customerId, filterParam.getValue(filterValue));
     }
 }

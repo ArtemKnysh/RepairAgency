@@ -1,6 +1,7 @@
 package com.epam.rd.java.basic.repairagency.repository.impl;
 
 import com.epam.rd.java.basic.repairagency.entity.Feedback;
+import com.epam.rd.java.basic.repairagency.entity.filtering.FeedbackFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.FeedbackSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
@@ -62,7 +63,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     }
 
     @Override
-    protected List<Feedback> parseResultSet(ResultSet rs) throws SQLException {
+    protected List<Feedback> parseEntitiesFromResultSet(ResultSet rs) throws SQLException {
         List<Feedback> result = new ArrayList<>();
         while (rs.next()) {
             Feedback feedback = new Feedback();
@@ -102,12 +103,19 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     }
 
     @Override
+    protected void findDefaultDependencies(Connection connection, Feedback feedback
+    ) throws SQLException, NotFoundException {
+        feedback.setCustomer(userRepository.findById(connection, feedback.getCustomerId()));
+        feedback.setMaster(userRepository.findById(connection, feedback.getMasterId()));
+    }
+
+    @Override
     public List<Feedback> findAll(Connection connection, int offset, int amount, FeedbackSortingParameter sortingParameter, SortingType sortingType) throws SQLException, NotFoundException {
         String query = getSelectWithMasterAndCustomerFullNameQuery();
         query += " ORDER BY " + sortingParameter.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQuery(connection, query);
+        return findAllByQueryWithoutParameters(connection, query);
     }
 
     @Override
@@ -119,14 +127,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQueryWithOneParameter(connection, query, customerId);
-    }
-
-    @Override
-    protected void findDefaultDependencies(Connection connection, Feedback feedback
-    ) throws SQLException, NotFoundException {
-        feedback.setCustomer(userRepository.findById(connection, feedback.getCustomerId()));
-        feedback.setMaster(userRepository.findById(connection, feedback.getMasterId()));
+        return findAllByQueryWithParameters(connection, query, customerId);
     }
 
     @Override
@@ -138,14 +139,13 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;
-        return findAllByQueryWithOneParameter(connection, query, masterId);
+        return findAllByQueryWithParameters(connection, query, masterId);
     }
-
 
     @Override
     public List<Feedback> findAll(Connection connection) throws SQLException, NotFoundException {
         String sql = getSelectQuery() + " ORDER BY create_time DESC";
-        return findAllByQuery(connection, sql);
+        return findAllByQueryWithoutParameters(connection, sql);
     }
 
     @Override
@@ -153,29 +153,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? AND master_id = ? AND is_hidden = false";
-        List<Feedback> result;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, customerId);
-            statement.setLong(2, masterId);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            if (result == null || result.size() == 0) {
-                throw new NotFoundException("Feedback with customerId '" + customerId + "' " +
-                        "and masterId '" + masterId + "' wasn't found");
-            }
-            if (result.size() > 1) {
-                throw new SQLException("Received more than one record");
-            }
-            Feedback feedback = result.get(0);
-            findDefaultDependencies(connection, feedback);
-            return feedback;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findByQueryWithParameters(connection, sql, customerId, masterId);
     }
 
     @Override
@@ -184,22 +162,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
         List<Feedback> result;
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? AND customer_id != ? AND is_hidden = false ORDER BY create_time DESC";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, masterId);
-            statement.setLong(2, customerId);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            for (Feedback feedback : result) {
-                findDefaultDependencies(connection, feedback);
-            }
-            return result;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findAllByQueryWithParameters(connection, sql, masterId, customerId);
     }
 
     @Override
@@ -207,7 +170,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? AND is_hidden = false ORDER BY create_time DESC";
-        return findAllByQueryWithOneParameter(connection, sql, customerId);
+        return findAllByQueryWithParameters(connection, sql, customerId);
     }
 
     @Override
@@ -215,7 +178,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? ORDER BY create_time DESC";
-        return findAllByQueryWithOneParameter(connection, sql, customerId);
+        return findAllByQueryWithParameters(connection, sql, customerId);
     }
 
     @Override
@@ -223,7 +186,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? AND is_hidden = false ORDER BY create_time DESC";
-        return findAllByQueryWithOneParameter(connection, sql, masterId);
+        return findAllByQueryWithParameters(connection, sql, masterId);
     }
 
     @Override
@@ -231,7 +194,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? ORDER BY create_time DESC";
-        return findAllByQueryWithOneParameter(connection, sql, masterId);
+        return findAllByQueryWithParameters(connection, sql, masterId);
     }
 
     @Override
@@ -262,22 +225,40 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     @Override
     public int findCountOfFeedbacks(Connection connection) throws SQLException {
         String sql = getSelectCountQuery();
-        return findIntValueByQuery(connection, sql);
+        return findIntValueByQueryWithoutParameters(connection, sql);
     }
 
     @Override
     public int findCountOfFeedbacksByCustomerId(Connection connection, long customerId) throws SQLException {
         String sql = getSelectCountQuery();
         sql += " WHERE customer_id = ? AND is_hidden = false";
-        return findIntValueByQueryWithOneParameter(connection, sql, customerId);
+        return findIntValueByQueryWithParameters(connection, sql, customerId);
     }
 
     @Override
     public int findCountOfFeedbacksByMasterId(Connection connection, long masterId) throws SQLException {
         String sql = getSelectCountQuery();
         sql += " WHERE master_id = ? AND is_hidden = false";
-        return findIntValueByQueryWithOneParameter(connection, sql, masterId);
+        return findIntValueByQueryWithParameters(connection, sql, masterId);
     }
 
+    @Override
+    public int findCountOfFeedbacks(Connection connection, FeedbackFilterParameter filterParam, String filterValue
+    ) throws SQLException {
+        String sql = getSelectCountQuery();
+        sql += " WHERE " + filterParam.getColumnName() + " = ? ";
+        return findIntValueByQueryWithParameters(connection, sql, filterParam.getValue(filterValue));
+    }
 
+    @Override
+    public List<Feedback> findAll(Connection connection, int offset, int amount, FeedbackSortingParameter sortingParam,
+                                  SortingType sortingType, FeedbackFilterParameter filterParam, String filterValue
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithMasterAndCustomerFullNameQuery();
+        query += " WHERE " + filterParam.getColumnName() + " = ? ";
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQueryWithParameters(connection, query, filterParam.getValue(filterValue));
+    }
 }

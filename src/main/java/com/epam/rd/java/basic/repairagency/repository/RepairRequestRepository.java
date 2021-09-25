@@ -3,6 +3,7 @@ package com.epam.rd.java.basic.repairagency.repository;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.User;
+import com.epam.rd.java.basic.repairagency.entity.filtering.RepairRequestFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.RepairRequestSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
@@ -53,5 +54,21 @@ public interface RepairRequestRepository extends GenericRepository<RepairRequest
 
     List<RepairRequest> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
                                           RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
+
+    List<RepairRequest> findAll(Connection connection, int offset, int amount,
+                                RepairRequestSortingParameter sortingParam, SortingType sortingType,
+                                RepairRequestFilterParameter filterParam, String filterValue
+    ) throws SQLException, NotFoundException;
+
+    int findCountOfRepairRequests(Connection connection, RepairRequestFilterParameter filterParam, String filterValue
+    ) throws SQLException;
+
+    int findCountOfRepairRequests(Connection connection, long customerId, RepairRequestFilterParameter filterParam,
+                                  String filterValue) throws SQLException;
+
+    List<RepairRequest> findAllByCustomerId(Connection connection, long customerId, int offset, int amount,
+                                            RepairRequestSortingParameter sortingParam, SortingType sortingType,
+                                            RepairRequestFilterParameter filterParam, String filterValue
     ) throws SQLException, NotFoundException;
 }

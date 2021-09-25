@@ -1,6 +1,7 @@
 package com.epam.rd.java.basic.repairagency.service.impl;
 
 import com.epam.rd.java.basic.repairagency.entity.Feedback;
+import com.epam.rd.java.basic.repairagency.entity.filtering.FeedbackFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.FeedbackSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
@@ -212,6 +213,32 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
             return repository.findAllByMasterId(connection, masterId, offset, amount, sortingParam, sortingType);
         } catch (SQLException e) {
             throw new DBException("Can't find feedbacks with masterId '" + masterId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfFeedbacks(FeedbackFilterParameter filterParam, String filterValue) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfFeedbacks(connection, filterParam, filterValue);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of feedbacks", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Feedback> findAll(int offset, int amount, FeedbackSortingParameter sortingParam, SortingType sortingType, FeedbackFilterParameter filterParam, String filterValue) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAll(connection, offset, amount, sortingParam, sortingType, filterParam, filterValue);
+        } catch (SQLException e) {
+            throw new DBException("Can't find feedbacks in DB", e);
         } finally {
             DBUtil.close(connection);
         }

@@ -11,14 +11,15 @@ import java.util.List;
 
 public interface AccountTransactionRepository extends GenericRepository<AccountTransaction> {
 
-    List<AccountTransaction> findAllByUserId(Connection connection, long userId, int offset, int amount,
-                                             AccountTransactionSortingParameter sortingParam, SortingType sortingType) throws SQLException, NotFoundException;
+    void insertAll(Connection connection, AccountTransaction... accountTransactions) throws SQLException;
 
     double findSumOfAmountByUserId(Connection connection, long userId) throws SQLException;
 
+    int findCountOfTransactionsByUserId(Connection connection, long userId) throws SQLException;
+
     List<AccountTransaction> findAllByUserId(Connection connection, long userId) throws SQLException, NotFoundException;
 
-    void insertAll(Connection connection, AccountTransaction... accountTransactions) throws SQLException;
-
-    int findCountOfTransactionsByUserId(Connection connection, long userId) throws SQLException;
+    List<AccountTransaction> findAllByUserId(Connection connection, long userId, int offset, int amount,
+                                             AccountTransactionSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
 }

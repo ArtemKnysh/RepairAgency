@@ -1,6 +1,8 @@
 package com.epam.rd.java.basic.repairagency.service;
 
+import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
 import com.epam.rd.java.basic.repairagency.entity.Feedback;
+import com.epam.rd.java.basic.repairagency.entity.filtering.FeedbackFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.FeedbackSortingParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
@@ -42,4 +44,8 @@ public interface FeedbackService extends GenericService<Feedback> {
     int findCountOfFeedbacksByCustomerId(long customerId) throws DBException;
 
     int findCountOfFeedbacksByMasterId(long masterId) throws DBException;
+
+    int findCountOfFeedbacks(FeedbackFilterParameter filterParam, String filterValue) throws DBException;
+
+    List<Feedback> findAll(int offset, int amount, FeedbackSortingParameter sortingParam, SortingType sortingType, FeedbackFilterParameter filterParam, String filterValue) throws DBException, NotFoundException;
 }
