@@ -3,6 +3,13 @@
 <%--@elvariable id="successMessage" type="java.lang.String"--%>
 <%--@elvariable id="entities" type="java.util.List"--%>
 <%--@elvariable id="currentPage" type="java.lang.Integer"--%>
+<%--@elvariable id="activeParam" type="java.lang.String"--%>
+<%--@elvariable id="activeType" type="java.lang.String"--%>
+<%--@elvariable id="recordsOnPage" type="java.lang.Integer"--%>
+<%--@elvariable id="statuses" type="java.util.List"--%>
+<%--@elvariable id="filterName" type="java.lang.String"--%>
+<%--@elvariable id="filterValue" type="java.lang.String"--%>
+<%--@elvariable id="listMasters" type="java.util.List"--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
@@ -15,7 +22,7 @@
 <fileTags:navbarForRole role="${loggedUser.role}" active="${initParam['customerRepairRequestListUrl']}"/>
 <div class="row">
     <div class="container">
-        <h3 class="text-center">List of created repair requests</h3>
+        <h3 class="text-center">List Of Created Repair Requests</h3>
         <hr>
         <div class="row">
             <div class="col-sm-4">
@@ -28,6 +35,63 @@
                 </form>
             </div>
         </div>
+        <hr>
+        <div class="form-row">
+            <div class="col-auto">
+                <a class="form-control btn btn-primary"
+                   href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}" page="${currentPage}"/>">Clear
+                    Filter</a>
+            </div>
+            <form action="${initParam['customerRepairRequestListUrl']}" method="get" class="col">
+                <div class="form-row">
+                    <input type="hidden" name="page" value="${currentPage}">
+                    <input type="hidden" name="activeParam" value="${activeParam}">
+                    <input type="hidden" name="activeType" value="${activeType}">
+                    <input type="hidden" name="recordsOnPage" value=${recordsOnPage}>
+                    <input type="hidden" name="filterName" value="statusId">
+                    <div class="col-auto">
+                        <h6>Filter By Status</h6>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control" name="filterValue">
+                            <c:forEach var="status" items="${statuses}">
+                                <option
+                                        <c:if test="${filterName == 'statusId' && status.id == filterValue}">selected</c:if>
+                                        value="${status.id}">${status}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="form-control btn btn-success">Apply</button>
+                    </div>
+                </div>
+            </form>
+            <form action="${initParam['customerRepairRequestListUrl']}" method="get" class="col">
+                <div class="form-row">
+                    <input type="hidden" name="page" value="${currentPage}">
+                    <input type="hidden" name="activeParam" value="${activeParam}">
+                    <input type="hidden" name="activeType" value="${activeType}">
+                    <input type="hidden" name="recordsOnPage" value=${recordsOnPage}>
+                    <input type="hidden" name="filterName" value="masterId">
+                    <div class="col-auto">
+                        <h6>Filter By Master</h6>
+                    </div>
+                    <div class="col-4">
+                        <select class="form-control" name="filterValue">
+                            <c:forEach var="master" items="${listMasters}">
+                                <option
+                                        <c:if test="${filterName == 'masterId'  && master.id == filterValue}">selected</c:if>
+                                        value="${master.id}">${master.fullName}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="form-control btn btn-success">Apply</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <hr>
         <c:if test="${successMessage != null}">
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -44,27 +108,27 @@
             <thead>
             <tr>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}" activeFilterName="${filterName}" activeFilterValue="${filterValue}"
                        page="${currentPage}" sortingParam="description"/>">Description</a>
                     <fileTags:showSortIcon sortingParam="description"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}" activeFilterName="${filterName}" activeFilterValue="${filterValue}"
                        page="${currentPage}" sortingParam="cost"/>">Cost</a>
                     <fileTags:showSortIcon sortingParam="cost"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}" activeFilterName="${filterName}" activeFilterValue="${filterValue}"
                        page="${currentPage}" sortingParam="status"/>">Status</a>
                     <fileTags:showSortIcon sortingParam="status"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}" activeFilterName="${filterName}" activeFilterValue="${filterValue}"
                        page="${currentPage}" sortingParam="createdAt"/>">Created At</a>
                     <fileTags:showSortIcon sortingParam="createdAt"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}" activeFilterName="${filterName}" activeFilterValue="${filterValue}"
                        page="${currentPage}" sortingParam="masterFullName"/>">Master</a>
                     <fileTags:showSortIcon sortingParam="masterFullName"/>
                 </th>
@@ -119,6 +183,8 @@
         <hr>
         <jsp:include page="/pages/common/layouts/_table-footer.jsp">
             <jsp:param name="href" value="${initParam['customerRepairRequestListUrl']}"/>
+            <jsp:param name="activeFilterName" value="${filterName}"/>
+            <jsp:param name="activeFilterValue" value="${filterValue}"/>
         </jsp:include>
     </div>
 </div>

@@ -10,6 +10,10 @@
         <input type="hidden" name="page" value="${currentPage}">
         <input type="hidden" name="activeParam" value="${activeParam}">
         <input type="hidden" name="activeType" value="${activeType}">
+        <c:if test="${param.activeFilterName != null && param.activeFilterValue != null}">
+            <input type="hidden" name="filterName" value="${param.activeFilterName}">
+            <input type="hidden" name="filterValue" value="${param.activeFilterValue}">
+        </c:if>
         <div class="col-auto">Show</div>
         <div class="col-auto">
             <select name="recordsOnPage" class="custom-select">
@@ -29,17 +33,17 @@
             <li class="page-item
                     <c:if test="${numberOfPages == 1 || currentPage == 1}">disabled</c:if>">
                 <a class="page-link"
-                   href="<fileTags:hrefWithParameters href="${param.href}" page="${currentPage - 1}"/>">Previous</a>
+                   href="<fileTags:hrefWithParameters href="${param.href}" page="${currentPage - 1}" activeFilterName="${param.activeFilterName}" activeFilterValue="${param.activeFilterValue}"/>">Previous</a>
             </li>
             <c:forEach begin="1" end="${numberOfPages}" var="num">
                 <li class="page-item <c:if test="${currentPage == num}">active</c:if>">
                     <a class="page-link"
-                       href="<fileTags:hrefWithParameters href="${param.href}" page="${num}"/>">${num}</a>
+                       href="<fileTags:hrefWithParameters href="${param.href}" page="${num}" activeFilterName="${param.activeFilterName}" activeFilterValue="${param.activeFilterValue}"/>">${num}</a>
                 </li>
             </c:forEach>
             <li class="page-item <c:if test="${currentPage == numberOfPages}">disabled</c:if>">
                 <a class="page-link"
-                   href="<fileTags:hrefWithParameters href="${param.href}" page="${currentPage + 1}"/>">Next</a>
+                   href="<fileTags:hrefWithParameters href="${param.href}" page="${currentPage + 1}" activeFilterName="${param.activeFilterName}" activeFilterValue="${param.activeFilterValue}"/>">Next</a>
             </li>
         </ul>
     </div>
