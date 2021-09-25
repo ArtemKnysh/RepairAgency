@@ -149,7 +149,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     @Override
     public Feedback findByCustomerIdAndMasterId(Connection connection, long customerId, long masterId) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
-        sql += " WHERE customer_id = ? AND master_id = ?";
+        sql += " WHERE customer_id = ? AND master_id = ? AND is_hidden = false";
         List<Feedback> result;
         PreparedStatement statement = null;
         ResultSet resultSet = null;

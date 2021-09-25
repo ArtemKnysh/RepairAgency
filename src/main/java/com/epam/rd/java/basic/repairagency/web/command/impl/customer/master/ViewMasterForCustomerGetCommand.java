@@ -53,10 +53,8 @@ public class ViewMasterForCustomerGetCommand extends GetCommand {
         if (repairRequestService.findAllByCustomerIdAndMasterIdAndStatusCompleted(userId, master.getId()).size() > 0) {
             try {
                 Feedback feedback = feedbackService.findByCustomerIdAndMasterId(userId, masterId);
-                if (!feedback.getIsHidden()) {
-                    request.setAttribute("isCustomerCanLeaveFeedbackForMaster", true);
-                    request.setAttribute("customerFeedback", feedback);
-                }
+                request.setAttribute("isCustomerCanLeaveFeedbackForMaster", true);
+                request.setAttribute("customerFeedback", feedback);
             } catch (Exception e) {
                 request.setAttribute("isCustomerCanLeaveFeedbackForMaster", false);
                 request.setAttribute("customerFeedback", new Feedback());
