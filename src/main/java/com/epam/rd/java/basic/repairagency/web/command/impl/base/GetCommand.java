@@ -22,7 +22,7 @@ public abstract class GetCommand implements Command {
     }
 
     @Override
-    public void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public final void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         getLogger().info("{}: {}", request.getMethod(), WebUtil.getUrlPattern(request));
         request.setAttribute("errorMessage", request.getParameter("errorMessage"));
         request.setAttribute("successMessage", request.getParameter("successMessage"));

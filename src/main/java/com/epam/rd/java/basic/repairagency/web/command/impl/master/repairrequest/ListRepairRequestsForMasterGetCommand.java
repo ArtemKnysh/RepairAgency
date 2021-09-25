@@ -43,7 +43,7 @@ public class ListRepairRequestsForMasterGetCommand extends GetListWithSortingAnd
 
     @Override
     protected String getDefaultSortingParameter() {
-        return RepairRequestSortingParameter.STATUS.getFieldName();
+        return RepairRequestSortingParameter.CREATED_AT.getFieldName();
     }
 
     @Override

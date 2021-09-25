@@ -24,7 +24,7 @@ public abstract class PostCommandWithRedirectionToReferer implements Command {
     protected abstract void processRequest(HttpServletRequest request) throws Exception;
 
     @Override
-    public void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public final void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         getLogger().info("{}: {}", request.getMethod(), WebUtil.getUrlPattern(request));
         StringBuilder address = new StringBuilder();
         try {

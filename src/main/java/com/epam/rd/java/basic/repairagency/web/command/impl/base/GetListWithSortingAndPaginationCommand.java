@@ -23,6 +23,9 @@ public abstract class GetListWithSortingAndPaginationCommand extends GetCommand 
 
         int entitiesCount = getCountOfEntities(request);
         int numberOfPages = (int) Math.ceil(entitiesCount * 1.0 / recordsOnPage); //todo check if change type  of count
+        if (numberOfPages < 1) {
+            numberOfPages = 1;
+        }
         if (currentPage > numberOfPages) {
             currentPage = numberOfPages;
         }
