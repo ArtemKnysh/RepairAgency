@@ -6,16 +6,15 @@ import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
 import com.epam.rd.java.basic.repairagency.web.command.Method;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
-import com.epam.rd.java.basic.repairagency.web.command.impl.base.PostCommand;
+import com.epam.rd.java.basic.repairagency.web.command.impl.base.PostCommandWithRedirectionToReferer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @ProcessUrlPatterns("/common/user/account/top-up")
 @ProcessMethods(Method.POST)
-public class TopUpAccountPostCommand extends PostCommand {
+public class TopUpAccountPostCommand extends PostCommandWithRedirectionToReferer {
 
     private static final Logger log = LogManager.getLogger(TopUpAccountPostCommand.class);
 
@@ -25,8 +24,8 @@ public class TopUpAccountPostCommand extends PostCommand {
     }
 
     @Override
-    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
-        return Optional.of("Account top-up was successfully completed");
+    protected String getSuccessMessage(HttpServletRequest request) {
+        return "Account top-up was successfully completed";
     }
 
     @Override
@@ -35,12 +34,7 @@ public class TopUpAccountPostCommand extends PostCommand {
     }
 
     @Override
-    protected String getSuccessAddress(HttpServletRequest request) {
-        return WebUtil.getAppName(request) + "/common/user/view";
-    }
-
-    @Override
-    protected String getErrorAddress(HttpServletRequest request) {
+    protected String getDefaultAddress(HttpServletRequest request) {
         return WebUtil.getAppName(request) + "/common/user/view";
     }
 
