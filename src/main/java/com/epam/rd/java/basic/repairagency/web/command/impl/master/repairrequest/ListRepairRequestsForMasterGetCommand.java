@@ -1,6 +1,8 @@
 package com.epam.rd.java.basic.repairagency.web.command.impl.master.repairrequest;
 
-import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
+import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
+import com.epam.rd.java.basic.repairagency.entity.sorting.RepairRequestSortingParameter;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import com.epam.rd.java.basic.repairagency.service.RepairRequestService;
@@ -8,7 +10,7 @@ import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
 import com.epam.rd.java.basic.repairagency.web.command.Method;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
-import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetCommand;
+import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetListCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,7 +19,7 @@ import java.util.List;
 
 @ProcessUrlPatterns("/master/repair-request/list")
 @ProcessMethods(Method.GET)
-public class ListRepairRequestsForMasterGetCommand extends GetCommand {
+public class ListRepairRequestsForMasterGetCommand extends GetListCommand {
 
     private static final Logger log = LogManager.getLogger(ListRepairRequestsForMasterGetCommand.class);
 
@@ -32,11 +34,26 @@ public class ListRepairRequestsForMasterGetCommand extends GetCommand {
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected int getCountOfEntities(HttpServletRequest request) throws DBException {
+        RepairRequestService repairRequestService = (RepairRequestService)
+                WebUtil.getService(request, RepairRequestService.class);
+        long masterId = WebUtil.getLoggedUser(request).getId();
+        return repairRequestService.findCountOfRepairRequestsByMasterId(masterId);
+    }
+
+    @Override
+    protected String getDefaultSortingParameter() {
+        return RepairRequestSortingParameter.STATUS.getFieldName();
+    }
+
+    @Override
+    protected List<? extends AbstractEntity> getSortedEntities(HttpServletRequest request, int offset, int rowsNumber,
+                                                               SortingType sortingType, String sortingParameter
+    ) throws NotFoundException, DBException {
         long masterId = WebUtil.getLoggedUser(request).getId();
         RepairRequestService repairRequestService = (RepairRequestService)
                 WebUtil.getService(request, RepairRequestService.class);
-        List<RepairRequest> listRepairRequests = repairRequestService.findAllByMasterId(masterId);
-        request.setAttribute("listRepairRequests", listRepairRequests);
+        RepairRequestSortingParameter repairRequestSortingParameter = RepairRequestSortingParameter.getByFieldName(sortingParameter);
+        return repairRequestService.findAllByMasterId(masterId, offset, rowsNumber, repairRequestSortingParameter, sortingType);
     }
 }
