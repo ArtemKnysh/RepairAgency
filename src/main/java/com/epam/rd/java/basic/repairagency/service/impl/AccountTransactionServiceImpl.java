@@ -47,7 +47,7 @@ public class AccountTransactionServiceImpl extends AbstractService<AccountTransa
     }
 
     @Override
-    public List<AccountTransaction> findAllByUserId(long userId) throws DBException {
+    public List<AccountTransaction> findAllByUserId(long userId) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();

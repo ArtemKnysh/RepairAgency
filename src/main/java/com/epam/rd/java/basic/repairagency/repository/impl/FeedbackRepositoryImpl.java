@@ -96,7 +96,7 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     @Override
     public List<Feedback> findAll(Connection connection) throws SQLException, NotFoundException {
         String sql = getSelectQuery() + " ORDER BY create_time DESC";
-        return findAll(connection, sql);
+        return findAllByQuery(connection, sql);
     }
 
     @Override
@@ -178,25 +178,6 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? ORDER BY create_time DESC";
         return findAllByQueryWithOneParameter(connection, sql, masterId);
-    }
-
-    protected List<Feedback> findAllByQueryWithOneParameter(Connection connection, String sql, long parameter) throws SQLException, NotFoundException {
-        List<Feedback> result;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, parameter);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            for (Feedback feedback : result) {
-                findDefaultDependencies(connection, feedback);
-            }
-            return result;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
     }
 
     @Override

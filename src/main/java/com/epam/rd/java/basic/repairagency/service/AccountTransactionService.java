@@ -14,7 +14,7 @@ public interface AccountTransactionService extends GenericService<AccountTransac
 
     double findSumOfAmountByUserId(long userId) throws DBException;
 
-    List<AccountTransaction> findAllByUserId(long userId) throws DBException;
+    List<AccountTransaction> findAllByUserId(long userId) throws DBException, NotFoundException;
 
     void payForRepairRequest(long userId, long repairRequestId) throws NotFoundException, DBException;
 

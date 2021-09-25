@@ -87,10 +87,9 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements Ge
     @Override
     public List<E> findAll(Connection connection) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
-        return findAll(connection, sql);
+        return findAllByQuery(connection, sql);
     }
-
-    protected List<E> findAll(Connection connection, String query) throws SQLException, NotFoundException {
+    protected List<E> findAllByQuery(Connection connection, String query) throws SQLException, NotFoundException {
         List<E> result;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -102,6 +101,61 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements Ge
                 findDefaultDependencies(connection, entity);
             }
             return result;
+        } finally {
+            DBUtil.close(resultSet);
+            DBUtil.close(statement);
+        }
+    }
+
+    protected List<E> findAllByQueryWithOneParameter(Connection connection, String query, long userId) throws SQLException, NotFoundException {
+        List<E> result;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setLong(1, userId);
+            resultSet = statement.executeQuery();
+            result = parseResultSet(resultSet);
+            for (E entity : result) {
+                findDefaultDependencies(connection, entity);
+            }
+            return result;
+        } finally {
+            DBUtil.close(resultSet);
+            DBUtil.close(statement);
+        }
+    }
+
+    protected int findIntValueByQuery(Connection connection, String sql) throws SQLException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return 0;
+            }
+        } finally {
+            DBUtil.close(resultSet);
+            DBUtil.close(statement);
+        }
+    }
+
+    protected int findIntValueByQueryWithOneParameter(Connection connection, String sql, long parameter
+    ) throws SQLException {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, parameter);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return 0;
+            }
         } finally {
             DBUtil.close(resultSet);
             DBUtil.close(statement);

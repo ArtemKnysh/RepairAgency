@@ -149,27 +149,25 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     public List<User> findAll(Connection connection) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE role_id != " + UserRole.ADMIN.getId() + " ORDER BY create_time DESC";
-        return findAll(connection, sql);
+        return findAllByQuery(connection, sql);
     }
 
     @Override
     public List<User> findAllByRole(Connection connection, UserRole role) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE role_id = " + role.getId() + " ORDER BY create_time DESC";
-        return findAll(connection, sql);
+        return findAllByQuery(connection, sql);
     }
 
     @Override
     public List<User> findAllByRole(Connection connection, UserRole role, int offset, int amount,
                                     UserSortingParameter sortingParam, SortingType sortingType) throws SQLException, NotFoundException {
-        StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append(getSelectQuery());
-        queryBuilder
-                .append(" WHERE role_id = ").append(role.getId())
-                .append(" ORDER BY ").append(sortingParam.getColumnName())
-                .append(" ").append(sortingType.getType())
-                .append(" LIMIT ").append(offset).append(", ").append(amount);
-        return findAll(connection, queryBuilder.toString());
+        String query = getSelectQuery();
+        query += " WHERE role_id = " + role.getId();
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQuery(connection, query);
     }
 
     @Override

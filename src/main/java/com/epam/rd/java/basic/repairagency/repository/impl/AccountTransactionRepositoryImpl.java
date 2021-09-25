@@ -1,6 +1,7 @@
 package com.epam.rd.java.basic.repairagency.repository.impl;
 
 import com.epam.rd.java.basic.repairagency.entity.AccountTransaction;
+import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.factory.anotation.Repository;
 import com.epam.rd.java.basic.repairagency.repository.AccountTransactionRepository;
@@ -95,22 +96,10 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
     }
 
     @Override
-    public List<AccountTransaction> findAllByUserId(Connection connection, long userId) throws SQLException {
-        List<AccountTransaction> result;
+    public List<AccountTransaction> findAllByUserId(Connection connection, long userId) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE user_id = ? ORDER BY create_time DESC;";
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, userId);
-            resultSet = statement.executeQuery();
-            result = parseResultSet(resultSet);
-            return result;
-        } finally {
-            DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
+        return findAllByQueryWithOneParameter(connection, sql, userId);
     }
 
     @Override

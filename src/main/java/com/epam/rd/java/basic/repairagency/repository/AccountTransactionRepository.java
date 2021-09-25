@@ -10,7 +10,7 @@ public interface AccountTransactionRepository extends GenericRepository<AccountT
 
     double findSumOfAmountByUserId(Connection connection, long userId) throws SQLException;
 
-    List<AccountTransaction> findAllByUserId(Connection connection, long userId) throws SQLException;
+    List<AccountTransaction> findAllByUserId(Connection connection, long userId) throws SQLException, NotFoundException;
 
     void insertAll(Connection connection, AccountTransaction... accountTransactions) throws SQLException;
 }
