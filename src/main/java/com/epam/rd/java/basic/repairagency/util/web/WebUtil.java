@@ -1,10 +1,9 @@
 package com.epam.rd.java.basic.repairagency.util.web;
 
 import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
-import com.epam.rd.java.basic.repairagency.entity.Feedback;
 import com.epam.rd.java.basic.repairagency.entity.User;
 import com.epam.rd.java.basic.repairagency.factory.ServiceFactory;
-import com.epam.rd.java.basic.repairagency.service.*;
+import com.epam.rd.java.basic.repairagency.service.GenericService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -56,7 +55,7 @@ public class WebUtil {
         return address.toString();
     }
 
-    public static GenericService<? extends AbstractEntity> getService(HttpServletRequest request, Class<? extends GenericService<? extends AbstractEntity>> serviceClass ) {
+    public static GenericService<? extends AbstractEntity> getService(HttpServletRequest request, Class<? extends GenericService<? extends AbstractEntity>> serviceClass) {
         ServiceFactory serviceFactory = (ServiceFactory) request.getServletContext().getAttribute(ServiceFactory.getName());
         return serviceFactory.getService(serviceClass);
     }

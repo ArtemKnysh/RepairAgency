@@ -1,8 +1,6 @@
 package com.epam.rd.java.basic.repairagency.web.command.impl.manager.reapairrequest;
 
-import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
-import com.epam.rd.java.basic.repairagency.service.GenericService;
 import com.epam.rd.java.basic.repairagency.service.RepairRequestService;
 import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
 import com.epam.rd.java.basic.repairagency.web.command.Method;

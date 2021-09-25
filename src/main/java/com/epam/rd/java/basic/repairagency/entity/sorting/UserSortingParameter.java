@@ -23,7 +23,7 @@ public enum UserSortingParameter {
                 return value;
             }
         }
-        throw new IllegalArgumentException("Can't find user sorting parameter by field name" + fieldName);
+        throw new IllegalArgumentException("Can't find user sorting parameter by field name " + fieldName);
     }
 
     public String getFieldName() {

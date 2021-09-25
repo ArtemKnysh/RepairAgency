@@ -30,7 +30,8 @@ public interface RepairRequestService extends GenericService<RepairRequest> {
 
     void removeMasterFromRepairRequest(long repairRequestId) throws DBException;
 
-    List<RepairRequest> findAllByCustomerIdAndMasterIdAndStatusMoreThenPaid(long customerId, long masterId) throws DBException, NotFoundException;
+    List<RepairRequest> findAllByCustomerIdAndMasterIdAndStatusMoreThenPaid(long customerId, long masterId
+    ) throws DBException, NotFoundException;
 
     List<RepairRequest> findAllByCustomerIdAndMasterIdAndStatusCompleted(long customerId, long masterId) throws DBException, NotFoundException;
 

@@ -179,14 +179,17 @@
                                                     <form action="${initParam['managerFeedbackShowUrl']}" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.id}"/>
                                                         <input type="hidden" name="activeTab" value="feedbacks"/>
-                                                        <button type="submit" class="form-control btn btn-primary">Show</button>
+                                                        <button type="submit" class="form-control btn btn-primary">
+                                                            Show
+                                                        </button>
                                                     </form>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <form action="${initParam['managerFeedbackHideUrl']}" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.id}"/>
                                                         <input type="hidden" name="activeTab" value="feedbacks"/>
-                                                        <button type="submit" class="form-control btn btn-danger">Hide</button>
+                                                        <button type="submit" class="form-control btn btn-danger">Hide
+                                                        </button>
                                                     </form>
                                                 </c:otherwise>
                                             </c:choose>

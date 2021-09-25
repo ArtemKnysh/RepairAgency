@@ -10,10 +10,6 @@ public enum SortingType {
         this.type = type;
     }
 
-    public String getType() {
-        return type;
-    }
-
     public static SortingType getSortingType(String type) {
         if (type == null) {
             return DESC;
@@ -29,5 +25,9 @@ public enum SortingType {
 
     public static SortingType reverse(SortingType sort) {
         return ASC.equals(sort) ? DESC : ASC;
+    }
+
+    public String getType() {
+        return type;
     }
 }

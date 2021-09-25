@@ -49,6 +49,7 @@ public class ViewCustomerForMasterGetCommand extends GetCommand {
             FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
             Feedback customerFeedback = feedbackService.findByCustomerIdAndMasterId(customerId, masterId);
             request.setAttribute("customerFeedback", customerFeedback);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 }

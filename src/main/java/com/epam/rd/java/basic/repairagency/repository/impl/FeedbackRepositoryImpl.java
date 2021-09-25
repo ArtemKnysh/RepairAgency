@@ -94,7 +94,8 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
         statement.setLong(++paramIndex, entity.getId());
     }
 
-    private void prepareStatementForUpdateIsHidden(PreparedStatement statement, long feedbackId, boolean isHidden) throws SQLException {
+    private void prepareStatementForUpdateIsHidden(PreparedStatement statement, long feedbackId, boolean isHidden
+    ) throws SQLException {
         int paramIndex = 0;
         statement.setBoolean(++paramIndex, isHidden);
         statement.setLong(++paramIndex, feedbackId);
@@ -122,7 +123,8 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     }
 
     @Override
-    protected void findDefaultDependencies(Connection connection, Feedback feedback) throws SQLException, NotFoundException {
+    protected void findDefaultDependencies(Connection connection, Feedback feedback
+    ) throws SQLException, NotFoundException {
         feedback.setCustomer(userRepository.findById(connection, feedback.getCustomerId()));
         feedback.setMaster(userRepository.findById(connection, feedback.getMasterId()));
     }
@@ -147,7 +149,8 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     }
 
     @Override
-    public Feedback findByCustomerIdAndMasterId(Connection connection, long customerId, long masterId) throws SQLException, NotFoundException {
+    public Feedback findByCustomerIdAndMasterId(Connection connection, long customerId, long masterId
+    ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? AND master_id = ? AND is_hidden = false";
         List<Feedback> result;
@@ -200,28 +203,32 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     }
 
     @Override
-    public List<Feedback> findAllByCustomerId(Connection connection, long customerId) throws SQLException, NotFoundException {
+    public List<Feedback> findAllByCustomerId(Connection connection, long customerId
+    ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? AND is_hidden = false ORDER BY create_time DESC";
         return findAllByQueryWithOneParameter(connection, sql, customerId);
     }
 
     @Override
-    public List<Feedback> findAllByCustomerIdIncludeHidden(Connection connection, long customerId) throws SQLException, NotFoundException {
+    public List<Feedback> findAllByCustomerIdIncludeHidden(Connection connection, long customerId
+    ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE customer_id = ? ORDER BY create_time DESC";
         return findAllByQueryWithOneParameter(connection, sql, customerId);
     }
 
     @Override
-    public List<Feedback> findAllByMasterId(Connection connection, long masterId) throws SQLException, NotFoundException {
+    public List<Feedback> findAllByMasterId(Connection connection, long masterId
+    ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? AND is_hidden = false ORDER BY create_time DESC";
         return findAllByQueryWithOneParameter(connection, sql, masterId);
     }
 
     @Override
-    public List<Feedback> findAllByMasterIdIncludeHidden(Connection connection, long masterId) throws SQLException, NotFoundException {
+    public List<Feedback> findAllByMasterIdIncludeHidden(Connection connection, long masterId
+    ) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? ORDER BY create_time DESC";
         return findAllByQueryWithOneParameter(connection, sql, masterId);

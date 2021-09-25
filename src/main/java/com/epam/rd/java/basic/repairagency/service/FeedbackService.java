@@ -29,7 +29,9 @@ public interface FeedbackService extends GenericService<Feedback> {
 
     List<Feedback> findAllByMasterId(long masterId) throws DBException, NotFoundException;
 
-    List<Feedback> findAllByMasterIdIncludeHidden(long masterId) throws DBException, NotFoundException;
+    List<Feedback> findAllByCustomerId(long customerId, int offset, int amount,
+                                       FeedbackSortingParameter sortingParameter, SortingType sortingType
+    ) throws DBException, NotFoundException;
 
     void hide(long feedbackId) throws DBException;
 

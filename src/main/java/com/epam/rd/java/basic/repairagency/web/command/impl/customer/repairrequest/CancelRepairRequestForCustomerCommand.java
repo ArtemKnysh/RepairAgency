@@ -5,7 +5,6 @@ import com.epam.rd.java.basic.repairagency.exception.DBException;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import com.epam.rd.java.basic.repairagency.service.RepairRequestService;
 import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
-import com.epam.rd.java.basic.repairagency.web.command.Command;
 import com.epam.rd.java.basic.repairagency.web.command.Method;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
@@ -13,10 +12,7 @@ import com.epam.rd.java.basic.repairagency.web.command.impl.base.PostCommandWith
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @ProcessUrlPatterns("/customer/repair-request/cancel")
 @ProcessMethods(Method.POST)

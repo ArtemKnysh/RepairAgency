@@ -23,16 +23,16 @@ public class AccountTransaction extends AbstractEntity {
         return amount;
     }
 
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
     public String getAmountWithSign() {
         if (amount > 0) {
             return "+" + amount;
         } else {
             return String.valueOf(amount);
         }
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
     }
 
     @Override

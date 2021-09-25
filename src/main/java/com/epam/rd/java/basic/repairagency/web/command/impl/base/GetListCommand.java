@@ -11,12 +11,12 @@ import java.util.List;
 public abstract class GetListCommand extends GetCommand {
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected void processRequest(HttpServletRequest request) throws Exception {
         int currentPage = 1;
         if (request.getParameter("page") != null) {
             currentPage = Integer.parseInt(request.getParameter("page"));
         }
-        int recordsOnPage = 3;
+        int recordsOnPage = 5;
         if (request.getParameter("recordsOnPage") != null) {
             recordsOnPage = Integer.parseInt(request.getParameter("recordsOnPage"));
         }
@@ -62,8 +62,8 @@ public abstract class GetListCommand extends GetCommand {
 
     protected abstract String getDefaultSortingParameter();
 
-    protected abstract List<? extends AbstractEntity> getSortedEntities(
-            HttpServletRequest request, int offset, int rowsNumber, SortingType sortingType, String sortingParameter
+    protected abstract List<? extends AbstractEntity> getSortedEntities(HttpServletRequest request, int offset, int rowsNumber,
+                                                                        SortingType sortingType, String sortingParameter
     ) throws NotFoundException, DBException;
 
 }

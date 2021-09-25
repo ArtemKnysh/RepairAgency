@@ -51,5 +51,6 @@ public abstract class AbstractEntity implements Serializable {
 
     public boolean isValid() {
         return true;
-    };
+    }
+
 }

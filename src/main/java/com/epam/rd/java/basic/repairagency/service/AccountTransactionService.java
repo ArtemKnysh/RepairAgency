@@ -6,8 +6,6 @@ import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface AccountTransactionService extends GenericService<AccountTransaction> {

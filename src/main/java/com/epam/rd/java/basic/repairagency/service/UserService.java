@@ -20,7 +20,8 @@ public interface UserService extends GenericService<User> {
     List<User> findAllByRole(UserRole role) throws DBException, NotFoundException;
 
     List<User> findAllByRole(UserRole role, int offset, int amount,
-                             UserSortingParameter sortingParam, SortingType sortingType) throws NotFoundException, DBException;
+                             UserSortingParameter sortingParam, SortingType sortingType
+    ) throws NotFoundException, DBException;
 
     User findMasterById(long masterId) throws NotFoundException, DBException;
 

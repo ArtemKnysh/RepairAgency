@@ -14,8 +14,6 @@ import com.epam.rd.java.basic.repairagency.web.command.UrlPatternAndMethod;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
 import com.epam.rd.java.basic.repairagency.web.config.SecurityConfig;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 

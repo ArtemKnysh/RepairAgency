@@ -13,11 +13,13 @@ import java.util.List;
 
 public interface RepairRequestRepository extends GenericRepository<RepairRequest> {
 
-    void setStatusForRepairRequest(Connection connection, long repairRequestId, RepairRequestStatus status) throws SQLException;
+    void setStatusForRepairRequest(Connection connection, long repairRequestId, RepairRequestStatus status
+    ) throws SQLException;
 
     void setCostToRepairRequest(Connection connection, long repairRequestId, double cost) throws SQLException;
 
-    void setDescriptionToRepairRequest(Connection connection, long repairRequestId, String description) throws SQLException;
+    void setDescriptionToRepairRequest(Connection connection, long repairRequestId, String description
+    ) throws SQLException;
 
     void setMasterToRepairRequest(Connection connection, long repairRequestId, long masterId) throws SQLException;
 
@@ -25,10 +27,31 @@ public interface RepairRequestRepository extends GenericRepository<RepairRequest
 
     List<RepairRequest> findAllByCustomer(Connection connection, User customer) throws SQLException, NotFoundException;
 
-    List<RepairRequest> findAllByCustomerId(Connection connection, long customerId) throws SQLException, NotFoundException;
+    List<RepairRequest> findAllByCustomerId(Connection connection, long customerId
+    ) throws SQLException, NotFoundException;
 
     void removeMasterFromRepairRequest(Connection connection, long repairRequestId) throws SQLException;
 
-    List<RepairRequest> findAllByCustomerIdAndMasterIdAndStatusMoreThenStatusId(Connection connection, long customerId, long masterId, long statusId) throws SQLException, NotFoundException;
+    List<RepairRequest> findAllByCustomerIdAndMasterIdAndStatusMoreThenStatusId(Connection connection, long customerId,
+                                                                                long masterId, long statusId
+    ) throws SQLException, NotFoundException;
 
+
+    int findCountOfRepairRequests(Connection connection) throws SQLException;
+
+    int findCountOfRepairRequestsByCustomerId(Connection connection, long customerId) throws SQLException;
+
+    int findCountOfRepairRequestsByMasterId(Connection connection, long masterId) throws SQLException;
+
+    List<RepairRequest> findAll(Connection connection, int offset, int amount,
+                                RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
+
+    List<RepairRequest> findAllByCustomerId(Connection connection, long customerId, int offset, int amount,
+                                            RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
+
+    List<RepairRequest> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
+                                          RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
 }

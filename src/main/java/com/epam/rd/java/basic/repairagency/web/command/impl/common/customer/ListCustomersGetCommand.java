@@ -1,7 +1,6 @@
 package com.epam.rd.java.basic.repairagency.web.command.impl.common.customer;
 
 import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
-import com.epam.rd.java.basic.repairagency.entity.User;
 import com.epam.rd.java.basic.repairagency.entity.UserRole;
 import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.entity.sorting.UserSortingParameter;
@@ -12,7 +11,6 @@ import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
 import com.epam.rd.java.basic.repairagency.web.command.Method;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
-import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetCommand;
 import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetListCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -52,7 +50,9 @@ public class ListCustomersGetCommand extends GetListCommand {
     }
 
     @Override
-    protected List<? extends AbstractEntity> getSortedEntities(HttpServletRequest request, int offset, int rowsNumber, SortingType sortingType, String sortingParameter) throws NotFoundException, DBException {
+    protected List<? extends AbstractEntity> getSortedEntities(HttpServletRequest request, int offset, int rowsNumber,
+                                                               SortingType sortingType, String sortingParameter
+    ) throws NotFoundException, DBException {
         UserService userService = (UserService) WebUtil.getService(request, UserService.class);
         UserSortingParameter userSortingParameter = UserSortingParameter.getByFieldName(sortingParameter);
         return userService.findAllByRole(UserRole.CUSTOMER, offset, rowsNumber, userSortingParameter, sortingType);

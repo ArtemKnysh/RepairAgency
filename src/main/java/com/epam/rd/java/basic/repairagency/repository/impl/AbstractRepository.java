@@ -89,6 +89,7 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements Ge
         String sql = getSelectQuery();
         return findAllByQuery(connection, sql);
     }
+
     protected List<E> findAllByQuery(Connection connection, String query) throws SQLException, NotFoundException {
         List<E> result;
         PreparedStatement statement = null;

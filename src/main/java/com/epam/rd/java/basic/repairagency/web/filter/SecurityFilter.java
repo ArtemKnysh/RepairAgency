@@ -2,7 +2,6 @@ package com.epam.rd.java.basic.repairagency.web.filter;
 
 import com.epam.rd.java.basic.repairagency.util.web.SecurityUtil;
 import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
-import com.epam.rd.java.basic.repairagency.web.config.SecurityConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
