@@ -16,7 +16,7 @@ public abstract class GetListWithSortingAndPaginationCommand extends GetCommand 
         if (request.getParameter("page") != null) {
             currentPage = Integer.parseInt(request.getParameter("page"));
         }
-        int recordsOnPage = 5;
+        int recordsOnPage = Integer.parseInt(request.getServletContext().getInitParameter("recordsOnPage"));
         if (request.getParameter("recordsOnPage") != null) {
             recordsOnPage = Integer.parseInt(request.getParameter("recordsOnPage"));
         }

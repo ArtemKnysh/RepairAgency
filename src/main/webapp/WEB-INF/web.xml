@@ -54,6 +54,10 @@
         <param-name>rootPackageName</param-name>
         <param-value>com.epam.rd.java.basic.repairagency</param-value>
     </context-param>
+    <context-param>
+        <param-name>recordsOnPage</param-name>
+        <param-value>5</param-value>
+    </context-param>
     <!--    COMMON URLs    -->
     <context-param>
         <param-name>loginUrl</param-name>
