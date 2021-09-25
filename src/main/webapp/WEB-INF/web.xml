@@ -123,7 +123,7 @@
     </context-param>
     <context-param>
         <param-name>customerMasterListUrl</param-name>
-        <param-value>/RepairAgency/customer/master/list</param-value>
+        <param-value>/RepairAgency/common/master/list</param-value>
     </context-param>
     <context-param>
         <param-name>customerFeedbackEditUrl</param-name>
@@ -139,7 +139,7 @@
     </context-param>
     <context-param>
         <param-name>customerCustomerListUrl</param-name>
-        <param-value>/RepairAgency/customer/customer/list</param-value>
+        <param-value>/RepairAgency/common/customer/list</param-value>
     </context-param>
     <context-param>
         <param-name>customerLogoutUrl</param-name>
@@ -188,11 +188,11 @@
     </context-param>
     <context-param>
         <param-name>managerMasterListUrl</param-name>
-        <param-value>/RepairAgency/manager/master/list</param-value>
+        <param-value>/RepairAgency/common/master/list</param-value>
     </context-param>
     <context-param>
         <param-name>managerCustomerListUrl</param-name>
-        <param-value>/RepairAgency/manager/customer/list</param-value>
+        <param-value>/RepairAgency/common/customer/list</param-value>
     </context-param>
     <context-param>
         <param-name>managerCustomerViewUrl</param-name>
@@ -229,7 +229,7 @@
     </context-param>
     <context-param>
         <param-name>masterCustomerListUrl</param-name>
-        <param-value>/RepairAgency/master/customer/list</param-value>
+        <param-value>/RepairAgency/common/customer/list</param-value>
     </context-param>
     <context-param>
         <param-name>masterRepairRequestListUrl</param-name>

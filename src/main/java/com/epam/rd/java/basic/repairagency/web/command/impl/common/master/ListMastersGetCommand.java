@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@ProcessUrlPatterns({"/customer/master/list","/manager/master/list"})
+@ProcessUrlPatterns("/common/master/list")
 @ProcessMethods(Method.GET)
 public class ListMastersGetCommand extends GetCommand {
 

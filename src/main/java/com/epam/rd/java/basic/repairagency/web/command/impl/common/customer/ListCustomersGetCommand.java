@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@ProcessUrlPatterns({"/customer/customer/list", "/master/customer/list", "/manager/customer/list"})
+@ProcessUrlPatterns("/common/customer/list")
 @ProcessMethods(Method.GET)
 public class ListCustomersGetCommand extends GetListCommand {
 
@@ -34,6 +34,12 @@ public class ListCustomersGetCommand extends GetListCommand {
     @Override
     protected String getErrorMessage(HttpServletRequest request) {
         return "Can't show customers list page";
+    }
+
+    @Override
+    protected String getSuccessAddress(HttpServletRequest request) {
+        String role = WebUtil.getLoggedUser(request).getRole().toString().toLowerCase();
+        return "/pages/" + role + "/customer/list.jsp";
     }
 
     protected int getCountOfEntities(HttpServletRequest request) throws DBException {
