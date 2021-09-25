@@ -1,7 +1,8 @@
 <%--@elvariable id="loggedUser" type="com.epam.rd.java.basic.repairagency.entity.User"--%>
 <%--@elvariable id="errorMessage" type="java.lang.String"--%>
 <%--@elvariable id="successMessage" type="java.lang.String"--%>
-<%--@elvariable id="listRepairRequests" type="java.util.List"--%>
+<%--@elvariable id="currentPage" type="java.lang.Integer"--%>
+<%--@elvariable id="entities" type="java.util.List"--%>
 <%--@elvariable id="listMasters" type="java.util.List"--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -12,7 +13,7 @@
     <jsp:param name="title" value="List Of Repair Requests"/>
 </jsp:include>
 <body>
-<fileTags:navbarForRole role="${loggedUser.role}" active="/manager/repair-request/list"/>
+<fileTags:navbarForRole role="${loggedUser.role}" active="${initParam['managerRepairRequestListUrl']}"/>
 <div class="row">
     <div class="container col-md-11">
         <h3 class="text-center">List of repair requests</h3>
@@ -32,17 +33,41 @@
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th class="col-2">Description</th>
-                <th>Cost</th>
-                <th class="col-2">Status</th>
-                <th>Created at</th>
-                <th>Customer</th>
-                <th class="col-3">Master</th>
+                <th class="col-2">
+                    <a href="<fileTags:hrefWithParameters href="${initParam['managerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="description"/>">Description</a>
+                    <fileTags:showSortIcon sortingParam="description"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['managerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="cost"/>">Cost</a>
+                    <fileTags:showSortIcon sortingParam="cost"/>
+                </th>
+                <th class="col-2">
+                    <a href="<fileTags:hrefWithParameters href="${initParam['managerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="status"/>">Status</a>
+                    <fileTags:showSortIcon sortingParam="status"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['managerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="createdAt"/>">Created At</a>
+                    <fileTags:showSortIcon sortingParam="createdAt"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['managerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="customerFullName"/>">Customer</a>
+                    <fileTags:showSortIcon sortingParam="customerFullName"/>
+                </th>
+                <th class="col-3">
+                    <a href="<fileTags:hrefWithParameters href="${initParam['managerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="masterFullName"/>">Master</a>
+                    <fileTags:showSortIcon sortingParam="masterFullName"/>
+                </th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="repairRequest" items="${listRepairRequests}">
+            <c:forEach var="repairRequest" items="${entities}">
                 <tr>
                     <td><c:out value="${repairRequest.shortDescription}"/></td>
                     <td class="form-group">
@@ -121,6 +146,10 @@
             </c:forEach>
             </tbody>
         </table>
+        <hr>
+        <jsp:include page="/pages/common/layouts/_table-footer.jsp">
+            <jsp:param name="href" value="${initParam['managerRepairRequestListUrl']}"/>
+        </jsp:include>
     </div>
 </div>
 </body>

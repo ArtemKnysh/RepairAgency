@@ -1,7 +1,8 @@
 <%--@elvariable id="loggedUser" type="com.epam.rd.java.basic.repairagency.entity.User"--%>
 <%--@elvariable id="errorMessage" type="java.lang.String"--%>
 <%--@elvariable id="successMessage" type="java.lang.String"--%>
-<%--@elvariable id="listRepairRequests" type="java.util.List"--%>
+<%--@elvariable id="entities" type="java.util.List"--%>
+<%--@elvariable id="currentPage" type="java.lang.Integer"--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
@@ -30,28 +31,48 @@
         <c:if test="${successMessage != null}">
             <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-            ${successMessage}
+                    ${successMessage}
             </div>
         </c:if>
         <c:if test="${errorMessage != null}">
             <div class="alert alert-danger alert-dismissible fade show">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-            ${errorMessage}
+                    ${errorMessage}
             </div>
         </c:if>
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th>Description</th>
-                <th>Cost</th>
-                <th>Status</th>
-                <th>Created at</th>
-                <th>Master</th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="description"/>">Description</a>
+                    <fileTags:showSortIcon sortingParam="description"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="cost"/>">Cost</a>
+                    <fileTags:showSortIcon sortingParam="cost"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="status"/>">Status</a>
+                    <fileTags:showSortIcon sortingParam="status"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="createdAt"/>">Created At</a>
+                    <fileTags:showSortIcon sortingParam="createdAt"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${initParam['customerRepairRequestListUrl']}"
+                       page="${currentPage}" sortingParam="masterFullName"/>">Master</a>
+                    <fileTags:showSortIcon sortingParam="masterFullName"/>
+                </th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="repairRequest" items="${listRepairRequests}">
+            <c:forEach var="repairRequest" items="${entities}">
                 <tr>
                     <td><c:out value="${repairRequest.shortDescription}"/></td>
                     <td class="form-group">
@@ -66,6 +87,7 @@
                         </div>
                     </td>
                     <td><c:out value="${repairRequest.status}"/></td>
+                    <td><c:out value="${repairRequest.createdAt}"/></td>
                     <td class="form-group">
                         <c:choose>
                             <c:when test="${repairRequest.master != null}">
@@ -74,7 +96,6 @@
                             <c:otherwise>Master wasn't set</c:otherwise>
                         </c:choose>
                     </td>
-                    <td><c:out value="${repairRequest.createdAt}"/></td>
                     <td class="form-group">
                         <div class="form-row">
                             <div class="col mb-1">
@@ -95,6 +116,10 @@
             </c:forEach>
             </tbody>
         </table>
+        <hr>
+        <jsp:include page="/pages/common/layouts/_table-footer.jsp">
+            <jsp:param name="href" value="${initParam['customerRepairRequestListUrl']}"/>
+        </jsp:include>
     </div>
 </div>
 </body>

@@ -1,7 +1,8 @@
 <%--@elvariable id="loggedUser" type="com.epam.rd.java.basic.repairagency.entity.User"--%>
 <%--@elvariable id="errorMessage" type="java.lang.String"--%>
 <%--@elvariable id="successMessage" type="java.lang.String"--%>
-<%--@elvariable id="masters" type="java.util.List"--%>
+<%--@elvariable id="entities" type="java.util.List"--%>
+<%--@elvariable id="currentPage" type="java.lang.Integer"--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
@@ -31,15 +32,31 @@
         <table class="table table-bordered table-striped">
             <thead>
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
+                       sortingParam="firstName"/>">First Name</a>
+                    <fileTags:showSortIcon sortingParam="firstName"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
+                    sortingParam="lastName"/>">Last Name</a>
+                    <fileTags:showSortIcon sortingParam="lastName"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
+                    sortingParam="email"/>">Email</a>
+                    <fileTags:showSortIcon sortingParam="email"/>
+                </th>
+                <th>
+                    <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
+                    sortingParam="phoneNumber"/>">Phone Number</a>
+                    <fileTags:showSortIcon sortingParam="phoneNumber"/>
+                </th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="master" items="${masters}">
+            <c:forEach var="master" items="${entities}">
                 <tr>
                     <td><c:out value="${master.firstName}"/></td>
                     <td><c:out value="${master.lastName}"/></td>
@@ -57,6 +74,10 @@
             </c:forEach>
             </tbody>
         </table>
+        <hr>
+        <jsp:include page="/pages/common/layouts/_table-footer.jsp">
+            <jsp:param name="href" value="${param.masterListUrl}"/>
+        </jsp:include>
     </div>
 </div>
 </body>

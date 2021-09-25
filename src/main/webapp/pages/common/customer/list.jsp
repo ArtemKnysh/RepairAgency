@@ -9,13 +9,13 @@
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
 <html>
 <jsp:include page="/pages/common/layouts/_head.jsp">
-    <jsp:param name="title" value="List Of Users"/>
+    <jsp:param name="title" value="List Of Customers"/>
 </jsp:include>
 <body>
-<fileTags:navbarForRole role="${loggedUser.role}" active="${initParam['adminUserListUrl']}"/>
+<fileTags:navbarForRole role="${loggedUser.role}" active="${param.customerListUrl}"/>
 <div class="row">
     <div class="container">
-        <h3 class="text-center">List of users</h3>
+        <h3 class="text-center">List Of Customers</h3>
         <hr>
         <c:if test="${errorMessage != null}">
             <div class="alert alert-danger alert-dismissible fade show">
@@ -33,35 +33,26 @@
             <thead>
             <tr>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
+                    <a href="<fileTags:hrefWithParameters href="${param.customerListUrl}" page="${currentPage}"
                        sortingParam="firstName"/>">First Name</a>
                     <fileTags:showSortIcon sortingParam="firstName"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
+                    <a href="<fileTags:hrefWithParameters href="${param.customerListUrl}" page="${currentPage}"
                     sortingParam="lastName"/>">Last Name</a>
                     <fileTags:showSortIcon sortingParam="lastName"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
+                    <a href="<fileTags:hrefWithParameters href="${param.customerListUrl}" page="${currentPage}"
                     sortingParam="email"/>">Email</a>
                     <fileTags:showSortIcon sortingParam="email"/>
                 </th>
                 <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
+                    <a href="<fileTags:hrefWithParameters href="${param.customerListUrl}" page="${currentPage}"
                     sortingParam="phoneNumber"/>">Phone Number</a>
                     <fileTags:showSortIcon sortingParam="phoneNumber"/>
                 </th>
-                <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="createdAt"/>">Created At</a>
-                    <fileTags:showSortIcon sortingParam="createdAt"/>
-                </th>
-                <th>
-                    <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="roleName"/>">Role</a>
-                    <fileTags:showSortIcon sortingParam="roleName"/>
-                </th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -71,13 +62,13 @@
                     <td><c:out value="${customer.lastName}"/></td>
                     <td><c:out value="${customer.email}"/></td>
                     <td><c:out value="${customer.phoneNumber}"/></td>
-                    <td><c:out value="${customer.createdAt}"/></td>
                     <td class="form-group">
-                        <form action="${initParam['adminUserSetRoleUrl']}" method="post">
-                            <libTags:selectRole role="${customer.role}"/>
-                            <input type="hidden" name="userId" value="<c:out value='${customer.id}'/>"/>
-                            <button type="submit" class="form-control btn btn-success">Set role</button>
-                        </form>
+                        <div class="form-row">
+                            <div class="col mb-1">
+                                <a class="form-control btn btn-primary"
+                                   href="${param.customerViewUrl}?customerId=${customer.id}">Details</a>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             </c:forEach>
@@ -85,7 +76,7 @@
         </table>
         <hr>
         <jsp:include page="/pages/common/layouts/_table-footer.jsp">
-            <jsp:param name="href" value="${initParam['adminUserListUrl']}"/>
+            <jsp:param name="href" value="${param.customerListUrl}"/>
         </jsp:include>
     </div>
 </div>

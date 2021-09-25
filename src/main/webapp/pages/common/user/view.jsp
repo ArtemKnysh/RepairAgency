@@ -2,7 +2,8 @@
 <%--@elvariable id="errorMessage" type="java.lang.String"--%>
 <%--@elvariable id="successMessage" type="java.lang.String"--%>
 <%--@elvariable id="balance" type="java.lang.Double"--%>
-<%--@elvariable id="userAccountTransactions" type="java.util.List"--%>
+<%--@elvariable id="entities" type="java.util.List"--%>
+<%--@elvariable id="currentPage" type="java.lang.Integer"--%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
@@ -13,7 +14,7 @@
 </jsp:include>
 <body>
 <fileTags:navbarForRole role="${loggedUser.role}" active="${param.userViewUrl}"/>
-<div class="container col-md-5">
+<div class="container col-md-6">
     <div class="card mb-3">
         <div class="card-body">
             <div class="row mb-3">
@@ -86,12 +87,20 @@
             <table class="table table-bordered table-striped mb-0">
                 <thead>
                 <tr>
-                    <th>Amount</th>
-                    <th>Created at</th>
+                    <th>
+                        <a href="<fileTags:hrefWithParameters href="${param.userViewUrl}" page="${currentPage}"
+                           sortingParam="amount"/>">Amount</a>
+                        <fileTags:showSortIcon sortingParam="amount"/>
+                    </th>
+                    <th>
+                        <a href="<fileTags:hrefWithParameters href="${param.userViewUrl}" page="${currentPage}"
+                           sortingParam="createdAt"/>">Created At</a>
+                        <fileTags:showSortIcon sortingParam="createdAt"/>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="accountTransaction" items="${userAccountTransactions}">
+                <c:forEach var="accountTransaction" items="${entities}">
                     <tr>
                         <td><c:out value="${accountTransaction.amountWithSign}"/></td>
                         <td><c:out value="${accountTransaction.createdAt}"/></td>
@@ -99,6 +108,10 @@
                 </c:forEach>
                 </tbody>
             </table>
+            <hr>
+            <jsp:include page="/pages/common/layouts/_table-footer.jsp">
+                <jsp:param name="href" value="${param.customerListUrl}"/>
+            </jsp:include>
         </div>
     </div>
 </div>
