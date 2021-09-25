@@ -2,9 +2,9 @@ package com.epam.rd.java.basic.repairagency.repository;
 
 import com.epam.rd.java.basic.repairagency.entity.User;
 import com.epam.rd.java.basic.repairagency.entity.UserRole;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
+import com.epam.rd.java.basic.repairagency.entity.sorting.UserSortingParameter;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
-import com.epam.rd.java.basic.repairagency.repository.sorting.SortingType;
-import com.epam.rd.java.basic.repairagency.repository.sorting.UserSortingParameter;
 
 import java.sql.Connection;
 import java.sql.SQLException;

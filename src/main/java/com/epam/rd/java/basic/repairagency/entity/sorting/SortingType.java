@@ -1,4 +1,4 @@
-package com.epam.rd.java.basic.repairagency.repository.sorting;
+package com.epam.rd.java.basic.repairagency.entity.sorting;
 
 public enum SortingType {
     DESC("DESC"),
