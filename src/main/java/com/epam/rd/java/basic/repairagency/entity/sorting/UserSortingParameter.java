@@ -6,7 +6,8 @@ public enum UserSortingParameter {
     FIRST_NAME("firstName", "first_name"),
     LAST_NAME("lastName", "last_name"),
     EMAIL("email", "email"),
-    PHONE_NUMBER("phoneNumber", "phone_number");
+    PHONE_NUMBER("phoneNumber", "phone_number"),
+    ROLE_NAME("roleName", "role_name");
 
     private final String fieldName;
     private final String columnName;
