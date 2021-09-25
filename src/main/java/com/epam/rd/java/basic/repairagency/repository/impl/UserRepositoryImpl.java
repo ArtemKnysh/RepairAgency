@@ -14,7 +14,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository(UserRepository.class)
 public class UserRepositoryImpl extends AbstractRepository<User> implements UserRepository {
@@ -31,6 +33,10 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
     @Override
     public String getSelectQuery() {
         return "SELECT * FROM user";
+    }
+
+    private String getSelectWithRoleNameQuery() {
+        return "SELECT u.*, r.name as role_name FROM user u, role r ";
     }
 
     private String getSelectCountQuery() {
@@ -157,6 +163,36 @@ public class UserRepositoryImpl extends AbstractRepository<User> implements User
         String sql = getSelectQuery();
         sql += " WHERE role_id = " + role.getId() + " ORDER BY create_time DESC";
         return findAllByQuery(connection, sql);
+    }
+
+    @Override
+    public List<User> findAllExcludeRoles(Connection connection, UserRole[] roles, int offset, int amount,
+                                          UserSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithRoleNameQuery();
+        query += " WHERE u.role_id = r.id";
+        if (roles.length > 0) {
+            String rolesAsString = getRolesAsString(roles);
+            query += " AND role_id NOT IN " + rolesAsString;
+        }
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQuery(connection, query);
+    }
+
+    private String getRolesAsString(UserRole[] roles) {
+        return Arrays.stream(roles).map(role -> String.valueOf(role.getId())).collect(Collectors.joining(", ", "(", ")"));
+    }
+
+    @Override
+    public int findCountOfUsersExcludeRoles(Connection connection, UserRole... roles) throws SQLException {
+        String sql = getSelectCountQuery();
+        if (roles.length > 0) {
+            String rolesAsString = getRolesAsString(roles);
+            sql += " WHERE role_id NOT IN " + rolesAsString;
+        }
+        return findIntValueByQuery(connection, sql);
     }
 
     @Override

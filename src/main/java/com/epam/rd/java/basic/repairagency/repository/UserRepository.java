@@ -23,5 +23,10 @@ public interface UserRepository extends GenericRepository<User> {
     List<User> findAllByRole(Connection connection, UserRole role, int offset, int amount,
                              UserSortingParameter sortingParam, SortingType sortingType) throws SQLException, NotFoundException;
 
+    List<User> findAllExcludeRoles(Connection connection, UserRole[] roles, int offset, int amount,
+                                   UserSortingParameter sortingParam, SortingType sortingType) throws SQLException, NotFoundException;
+
     int findCountOfUsersByRole(Connection connection, UserRole role) throws SQLException;
+
+    int findCountOfUsersExcludeRoles(Connection connection, UserRole... roles) throws SQLException;
 }

@@ -2,7 +2,8 @@ package com.epam.rd.java.basic.repairagency.repository.impl;
 
 import com.epam.rd.java.basic.repairagency.entity.AccountTransaction;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
-import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
+import com.epam.rd.java.basic.repairagency.entity.sorting.AccountTransactionSortingParameter;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.factory.anotation.Repository;
 import com.epam.rd.java.basic.repairagency.repository.AccountTransactionRepository;
 import com.epam.rd.java.basic.repairagency.util.db.DBUtil;
@@ -27,6 +28,10 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
 
     protected String getSelectAmountSumQuery() {
         return "SELECT SUM(amount) FROM account_transaction";
+    }
+
+    protected String getSelectCountQuery() {
+        return "SELECT COUNT(*) FROM account_transaction";
     }
 
     @Override
@@ -103,6 +108,19 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
     }
 
     @Override
+    public List<AccountTransaction> findAllByUserId(Connection connection, long userId, int offset, int amount,
+                                                    AccountTransactionSortingParameter sortingParam,
+                                                    SortingType sortingType
+    ) throws SQLException, NotFoundException {
+        String query = getSelectQuery();
+        query += " WHERE user_id = ?";
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQueryWithOneParameter(connection, query, userId);
+    }
+
+    @Override
     public void insertAll(Connection connection, AccountTransaction... accountTransactions) throws SQLException {
         String sql = getInsertQuery();
         PreparedStatement statement = null;
@@ -118,4 +136,28 @@ public class AccountTransactionRepositoryImpl extends AbstractRepository<Account
         }
 
     }
+
+
+    @Override
+    public int findCountOfTransactionsByUserId(Connection connection, long userId) throws SQLException {
+        String sql = getSelectCountQuery();
+        sql += " WHERE user_id = ?";
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            int paramIndex = 0;
+            statement.setLong(++paramIndex, userId);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            } else {
+                return 0;
+            }
+        } finally {
+            DBUtil.close(resultSet);
+            DBUtil.close(statement);
+        }
+    }
+
 }

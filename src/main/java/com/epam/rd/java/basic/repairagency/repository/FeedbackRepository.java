@@ -1,6 +1,8 @@
 package com.epam.rd.java.basic.repairagency.repository;
 
 import com.epam.rd.java.basic.repairagency.entity.Feedback;
+import com.epam.rd.java.basic.repairagency.entity.sorting.FeedbackSortingParameter;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 
 import java.sql.Connection;
@@ -24,4 +26,21 @@ public interface FeedbackRepository extends GenericRepository<Feedback> {
     void hide(Connection connection, long feedbackId) throws SQLException;
 
     void show(Connection connection, long feedbackId) throws SQLException;
+
+    int findCountOfFeedbacks(Connection connection) throws SQLException;
+
+    int findCountOfFeedbacksByCustomerId(Connection connection, long customerId) throws SQLException;
+
+    int findCountOfFeedbacksByMasterId(Connection connection, long masterId) throws SQLException;
+
+    List<Feedback> findAllByCustomerId(Connection connection, long customerId, int offset, int amount,
+                                       FeedbackSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
+
+    List<Feedback> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
+                                     FeedbackSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException;
+
+    List<Feedback> findAll(Connection connection, int offset, int amount, FeedbackSortingParameter sortingParameter,
+                           SortingType sortingType) throws SQLException, NotFoundException;
 }

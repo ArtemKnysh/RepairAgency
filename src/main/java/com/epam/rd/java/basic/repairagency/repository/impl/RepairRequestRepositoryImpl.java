@@ -3,6 +3,8 @@ package com.epam.rd.java.basic.repairagency.repository.impl;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.User;
+import com.epam.rd.java.basic.repairagency.entity.sorting.RepairRequestSortingParameter;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import com.epam.rd.java.basic.repairagency.factory.anotation.Inject;
 import com.epam.rd.java.basic.repairagency.factory.anotation.Repository;
@@ -35,6 +37,17 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
     @Override
     public String getSelectQuery() {
         return "SELECT * FROM repair_request";
+    }
+
+    private String getSelectCountQuery() {
+        return "SELECT COUNT(*) FROM repair_request";
+    }
+
+    private String getSelectWithMasterAndCustomerFullNameQuery() {
+        return "SELECT rr.*," +
+                " (SELECT CONCAT(c.first_name, ' ', c.last_name) FROM user c where c.id = rr.customer_id) AS customer_full_name," +
+                " (SELECT CONCAT(m.first_name, ' ', m.last_name) FROM user m where m.id = rr.master_id) AS master_full_name" +
+                " FROM repair_request rr";
     }
 
     @Override
@@ -270,5 +283,60 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
             DBUtil.close(resultSet);
             DBUtil.close(statement);
         }
+    }
+
+    @Override
+    public int findCountOfRepairRequests(Connection connection) throws SQLException {
+        String sql = getSelectCountQuery();
+        return findIntValueByQuery(connection, sql);
+    }
+
+    @Override
+    public int findCountOfRepairRequestsByCustomerId(Connection connection, long customerId) throws SQLException {
+        String sql = getSelectCountQuery();
+        sql += " WHERE customer_id = ?";
+        return findIntValueByQueryWithOneParameter(connection, sql, customerId);
+    }
+
+    @Override
+    public int findCountOfRepairRequestsByMasterId(Connection connection, long masterId) throws SQLException {
+        String sql = getSelectCountQuery();
+        sql += " WHERE master_id = ?";
+        return findIntValueByQueryWithOneParameter(connection, sql, masterId);
+    }
+
+    @Override
+    public List<RepairRequest> findAll(Connection connection, int offset, int amount,
+                                       RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithMasterAndCustomerFullNameQuery();
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQuery(connection, query);
+    }
+
+    @Override
+    public List<RepairRequest> findAllByCustomerId(Connection connection, long customerId, int offset, int amount,
+                                                   RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithMasterAndCustomerFullNameQuery();
+        query += " WHERE rr.customer_id = ?";
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQueryWithOneParameter(connection, query, customerId);
+    }
+
+    @Override
+    public List<RepairRequest> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
+                                                 RepairRequestSortingParameter sortingParam, SortingType sortingType
+    ) throws SQLException, NotFoundException {
+        String query = getSelectWithMasterAndCustomerFullNameQuery();
+        query += " WHERE rr.master_id = ?";
+        query += " ORDER BY " + sortingParam.getColumnName();
+        query += " " + sortingType.getType();
+        query += " LIMIT " + offset + ", " + amount;
+        return findAllByQueryWithOneParameter(connection, query, masterId);
     }
 }

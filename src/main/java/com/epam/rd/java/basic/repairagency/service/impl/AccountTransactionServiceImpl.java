@@ -3,6 +3,8 @@ package com.epam.rd.java.basic.repairagency.service.impl;
 import com.epam.rd.java.basic.repairagency.entity.AccountTransaction;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
+import com.epam.rd.java.basic.repairagency.entity.sorting.AccountTransactionSortingParameter;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import com.epam.rd.java.basic.repairagency.factory.anotation.Inject;
@@ -60,6 +62,22 @@ public class AccountTransactionServiceImpl extends AbstractService<AccountTransa
     }
 
     @Override
+    public List<AccountTransaction> findAllByUserId(long userId, int offset, int amount,
+                                                    AccountTransactionSortingParameter sortingParam,
+                                                    SortingType sortingType
+    ) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAllByUserId(connection, userId, offset, amount, sortingParam, sortingType);
+        } catch (SQLException e) {
+            throw new DBException("Can't find account transaction with userId '" + userId + "'", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
     public void payForRepairRequest(long userId, long repairRequestId) throws NotFoundException, DBException {
         Connection connection = null;
         try {
@@ -105,6 +123,19 @@ public class AccountTransactionServiceImpl extends AbstractService<AccountTransa
             DBUtil.rollbackTransaction(connection);
             throw new DBException("Can't do transfer from account with id '" + fromAccountUserId + "' " +
                     "to account with id '" + toAccountUserId + "'", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfTransactionsByUserId(long userId) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfTransactionsByUserId(connection, userId);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of Transactions by user with id '" + userId + "'", e);
         } finally {
             DBUtil.close(connection);
         }

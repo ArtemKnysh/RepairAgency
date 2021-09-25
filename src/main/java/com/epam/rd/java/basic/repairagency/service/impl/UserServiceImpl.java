@@ -15,6 +15,7 @@ import com.epam.rd.java.basic.repairagency.util.db.DBUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service(UserService.class)
@@ -90,6 +91,21 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
     }
 
     @Override
+    public List<User> findAllExcludeRoles(UserRole[] roles, int offset, int amount,
+                                          UserSortingParameter sortingParam, SortingType sortingType
+    ) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAllExcludeRoles(connection, roles, offset, amount, sortingParam, sortingType);
+        } catch (SQLException e) {
+            throw new DBException("Can't find users without roles '" + Arrays.toString(roles) + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
     public User findMasterById(long masterId) throws NotFoundException, DBException {
         Connection connection = null;
         try {
@@ -131,6 +147,19 @@ public class UserServiceImpl extends AbstractService<User> implements UserServic
             return repository.findCountOfUsersByRole(connection, role);
         } catch (SQLException e) {
             throw new DBException("Can't find count of users by role '" + role + "'", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfUsersExcludeRoles(UserRole... roles) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfUsersExcludeRoles(connection, roles);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of users", e);
         } finally {
             DBUtil.close(connection);
         }

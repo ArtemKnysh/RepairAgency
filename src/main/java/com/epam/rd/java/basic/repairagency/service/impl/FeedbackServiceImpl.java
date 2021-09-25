@@ -1,6 +1,8 @@
 package com.epam.rd.java.basic.repairagency.service.impl;
 
 import com.epam.rd.java.basic.repairagency.entity.Feedback;
+import com.epam.rd.java.basic.repairagency.entity.sorting.FeedbackSortingParameter;
+import com.epam.rd.java.basic.repairagency.entity.sorting.SortingType;
 import com.epam.rd.java.basic.repairagency.exception.DBException;
 import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import com.epam.rd.java.basic.repairagency.factory.anotation.Inject;
@@ -37,6 +39,19 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
         } catch (SQLException e) {
             throw new DBException("Can't find feedback with customerId '" + customerId + "' " +
                     "and masterId '" + masterId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Feedback> findAll(int offset, int amount, FeedbackSortingParameter sortingParameter, SortingType sortingType) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAll(connection, offset, amount, sortingParameter, sortingType);
+        } catch (SQLException e) {
+            throw new DBException("Can't find feedbacks in DB", e);
         } finally {
             DBUtil.close(connection);
         }
@@ -129,6 +144,74 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
             repository.show(connection, feedbackId);
         } catch (SQLException e) {
             throw new DBException("Can't show feedback with id '" + feedbackId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfFeedbacks() throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfFeedbacks(connection);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of feedbacks", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfFeedbacksByCustomerId(long customerId) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfFeedbacksByCustomerId(connection, customerId);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of feedbacks by customerId '" + customerId + "'", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public int findCountOfFeedbacksByMasterId(long masterId) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findCountOfFeedbacksByMasterId(connection, masterId);
+        } catch (SQLException e) {
+            throw new DBException("Can't find count of feedbacks by masterId '" + masterId + "'", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Feedback> findAllByCustomerId(long customerId, int offset, int amount,
+                                              FeedbackSortingParameter sortingParam, SortingType sortingType
+    ) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAllByCustomerId(connection, customerId, offset, amount, sortingParam, sortingType);
+        } catch (SQLException e) {
+            throw new DBException("Can't find feedbacks with customerId '" + customerId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Feedback> findAllByMasterId(long masterId, int offset, int amount,
+                                            FeedbackSortingParameter sortingParam, SortingType sortingType) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAllByMasterId(connection, masterId, offset, amount, sortingParam, sortingType);
+        } catch (SQLException e) {
+            throw new DBException("Can't find feedbacks with masterId '" + masterId + "' in DB", e);
         } finally {
             DBUtil.close(connection);
         }

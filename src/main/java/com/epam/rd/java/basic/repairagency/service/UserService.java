@@ -27,4 +27,9 @@ public interface UserService extends GenericService<User> {
     User findCustomerById(long customerId) throws NotFoundException, DBException;
 
     int findCountOfUsersByRole(UserRole role) throws DBException;
+
+    List<User> findAllExcludeRoles(UserRole[] roles, int offset, int amount, UserSortingParameter userSortingParameter,
+                                   SortingType sortingType) throws DBException, NotFoundException;
+
+    int findCountOfUsersExcludeRoles(UserRole... roles) throws DBException;
 }
