@@ -11,7 +11,7 @@ import com.epam.rd.java.basic.repairagency.util.web.WebUtil;
 import com.epam.rd.java.basic.repairagency.web.command.Method;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
-import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetListCommand;
+import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetListWithSortingAndPaginationCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +20,7 @@ import java.util.List;
 
 @ProcessUrlPatterns("/common/customer/list")
 @ProcessMethods(Method.GET)
-public class ListCustomersGetCommand extends GetListCommand {
+public class ListCustomersGetCommand extends GetListWithSortingAndPaginationCommand {
 
     private static final Logger log = LogManager.getLogger(ListCustomersGetCommand.class);
 

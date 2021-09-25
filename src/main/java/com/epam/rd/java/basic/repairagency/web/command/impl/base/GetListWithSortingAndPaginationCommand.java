@@ -8,7 +8,7 @@ import com.epam.rd.java.basic.repairagency.exception.NotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-public abstract class GetListCommand extends GetCommand {
+public abstract class GetListWithSortingAndPaginationCommand extends GetCommand {
 
     @Override
     protected void processRequest(HttpServletRequest request) throws Exception {
