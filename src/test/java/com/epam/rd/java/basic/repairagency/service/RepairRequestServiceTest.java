@@ -376,7 +376,6 @@ public class RepairRequestServiceTest extends ServiceTest {
             repairRequestService.setStatusToRepairRequest(repairRequest2.getId(), RepairRequestStatus.IN_WORK);
             repairRequest2 = repairRequestService.findById(repairRequest2.getId());
             List<RepairRequest> repairRequestsFromDB = repairRequestService.findAllByCustomerIdAndMasterIdAndStatusMoreThenPaid(customer.getId(), master.getId());
-            System.out.println("repairRequestsFromDB = " + repairRequestsFromDB);
             assertEquals(1, repairRequestsFromDB.size());
             assertFalse(repairRequestsFromDB.contains(repairRequest1));
             assertTrue(repairRequestsFromDB.contains(repairRequest2));
