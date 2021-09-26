@@ -57,6 +57,36 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements Ge
     }
 
     @Override
+    public void update(Connection connection, E entity) throws SQLException {
+        String sql = getUpdateQuery();
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            prepareStatementForUpdate(statement, entity);
+            int count = statement.executeUpdate();
+            if (count != 1) {
+                throw new SQLException("On update was modified more then 1 record: " + count);
+            }
+        } finally {
+            DBUtil.close(statement);
+        }
+    }
+
+    @Override
+    public void delete(Connection connection, E entity) throws SQLException {
+        String sql = getDeleteQuery();
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setLong(1, entity.getId());
+            statement.executeUpdate();
+            connection.commit();
+        } finally {
+            DBUtil.close(statement);
+        }
+    }
+
+    @Override
     public E findById(Connection connection, long id) throws SQLException, NotFoundException {
         String sql = getSelectQuery();
         sql += " WHERE id = ?";
@@ -200,7 +230,7 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements Ge
     }
 
     protected double findDoubleValueByQueryWithParameters(Connection connection, String sql, Object firstParameter,
-                                                    Object... otherParameters) throws SQLException {
+                                                          Object... otherParameters) throws SQLException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
@@ -214,36 +244,6 @@ public abstract class AbstractRepository<E extends AbstractEntity> implements Ge
             }
         } finally {
             DBUtil.close(resultSet);
-            DBUtil.close(statement);
-        }
-    }
-
-    @Override
-    public void update(Connection connection, E entity) throws SQLException {
-        String sql = getUpdateQuery();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            prepareStatementForUpdate(statement, entity);
-            int count = statement.executeUpdate();
-            if (count != 1) {
-                throw new SQLException("On update was modified more then 1 record: " + count);
-            }
-        } finally {
-            DBUtil.close(statement);
-        }
-    }
-
-    @Override
-    public void delete(Connection connection, E entity) throws SQLException {
-        String sql = getDeleteQuery();
-        PreparedStatement statement = null;
-        try {
-            statement = connection.prepareStatement(sql);
-            statement.setLong(1, entity.getId());
-            statement.executeUpdate();
-            connection.commit();
-        } finally {
             DBUtil.close(statement);
         }
     }

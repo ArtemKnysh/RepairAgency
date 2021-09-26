@@ -1,35 +1,16 @@
 package com.epam.rd.java.basic.repairagency.web.listener;
 
-import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
 import com.epam.rd.java.basic.repairagency.factory.CommandFactory;
 import com.epam.rd.java.basic.repairagency.factory.ServiceFactory;
-import com.epam.rd.java.basic.repairagency.factory.anotation.Inject;
-import com.epam.rd.java.basic.repairagency.factory.anotation.Repository;
-import com.epam.rd.java.basic.repairagency.factory.anotation.Service;
-import com.epam.rd.java.basic.repairagency.repository.GenericRepository;
-import com.epam.rd.java.basic.repairagency.service.GenericService;
 import com.epam.rd.java.basic.repairagency.util.FactoryUtil;
-import com.epam.rd.java.basic.repairagency.web.command.Command;
-import com.epam.rd.java.basic.repairagency.web.command.Method;
-import com.epam.rd.java.basic.repairagency.web.command.UrlPatternAndMethod;
-import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
-import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
 import com.epam.rd.java.basic.repairagency.web.config.SecurityConfig;
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @WebListener
 public class ContextListener implements ServletContextListener {

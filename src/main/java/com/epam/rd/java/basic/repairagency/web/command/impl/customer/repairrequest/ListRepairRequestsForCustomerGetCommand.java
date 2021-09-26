@@ -16,7 +16,6 @@ import com.epam.rd.java.basic.repairagency.web.command.Method;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessMethods;
 import com.epam.rd.java.basic.repairagency.web.command.annotation.ProcessUrlPatterns;
 import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetListWithSortingAndPaginationAndFilteringCommand;
-import com.epam.rd.java.basic.repairagency.web.command.impl.base.GetListWithSortingAndPaginationCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

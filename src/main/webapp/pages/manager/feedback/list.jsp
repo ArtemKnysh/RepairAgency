@@ -65,10 +65,14 @@
                     </div>
                     <div class="col-4">
                         <select class="form-control" name="filterValue">
-                            <option <c:if test="${filterName == 'isHidden' && filterValue == true}">selected</c:if>
-                                    value="true">Hidden</option>
-                            <option <c:if test="${filterName == 'isHidden' && filterValue == false}">selected</c:if>
-                                    value="false">Shown</option>
+                            <option
+                                    <c:if test="${filterName == 'isHidden' && filterValue == true}">selected</c:if>
+                                    value="true">Hidden
+                            </option>
+                            <option
+                                    <c:if test="${filterName == 'isHidden' && filterValue == false}">selected</c:if>
+                                    value="false">Shown
+                            </option>
                         </select>
                     </div>
                     <div class="col-auto">

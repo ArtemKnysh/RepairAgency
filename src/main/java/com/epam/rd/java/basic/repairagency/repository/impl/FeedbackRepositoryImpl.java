@@ -159,7 +159,6 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
     @Override
     public List<Feedback> findAllByMasterIdExceptCustomerId(Connection connection, long masterId, long customerId)
             throws SQLException, NotFoundException {
-        List<Feedback> result;
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? AND customer_id != ? AND is_hidden = false ORDER BY create_time DESC";
         return findAllByQueryWithParameters(connection, sql, masterId, customerId);

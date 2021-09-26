@@ -41,7 +41,7 @@ public abstract class GetListWithSortingAndPaginationAndFilteringCommand extends
 
     @Override
     protected final List<? extends AbstractEntity> getSortedEntities(HttpServletRequest request, int offset, int rowsNumber,
-                                                               SortingType sortingType, String sortingParameter
+                                                                     SortingType sortingType, String sortingParameter
     ) throws NotFoundException, DBException {
         String filterName = request.getParameter("filterName");
         String filterValue = request.getParameter("filterValue");

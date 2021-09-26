@@ -1,6 +1,5 @@
 package com.epam.rd.java.basic.repairagency.service;
 
-import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.User;

@@ -1,6 +1,5 @@
 package com.epam.rd.java.basic.repairagency.service;
 
-import com.epam.rd.java.basic.repairagency.entity.AbstractEntity;
 import com.epam.rd.java.basic.repairagency.entity.Feedback;
 import com.epam.rd.java.basic.repairagency.entity.filtering.FeedbackFilterParameter;
 import com.epam.rd.java.basic.repairagency.entity.sorting.FeedbackSortingParameter;
