@@ -38,7 +38,9 @@ public class SecurityFilter implements Filter {
         if (isLoggedIn && (isLoginRequest || isLoginPage)) {
             // the user is already logged in, and he's trying to log in again
             // then forward to the homepage
-            ((HttpServletResponse) response).sendRedirect(appName);
+            String role = WebUtil.getLoggedUser(httpRequest).getRole().toString().toLowerCase();
+            String address = WebUtil.getAppName(request) + "/" + role + "/home";
+            ((HttpServletResponse) response).sendRedirect(address);
         } else if (isLoggedIn && !SecurityUtil.isLoggedUserHasPermission(httpRequest)) {
             // the user is already logged in, and he's trying to request page requires
             // permission, then forward to the error page

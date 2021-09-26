@@ -2,7 +2,7 @@
 <%@ taglib prefix="lib" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
 <nav class="navbar-expand-lg navbar-light bg-light shadow-sm navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="${initParam['customerUserListUrl']}"> Repair Agency </a>
+        <a class="navbar-brand" href="${initParam['customerHomeUrl']}"> Repair Agency </a>
         <ul class="navbar-nav mr-auto nav">
             <lib:navItem href="${initParam['customerRepairRequestListUrl']}"
                          text="Repair Requests"

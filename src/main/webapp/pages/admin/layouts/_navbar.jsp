@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="${initParam['adminUserListUrl']}"> Repair Agency </a>
         <ul class="navbar-nav mr-auto nav">
-            <lib:navItem href="${initParam['adminUserListUrl']}" text="Users" active="${param.active}"/>
+            <lib:navItem href="${initParam['adminHomeUrl']}" text="Users" active="${param.active}"/>
         </ul>
         <ul class="navbar-nav ml-auto nav">
             <li class="nav-item">

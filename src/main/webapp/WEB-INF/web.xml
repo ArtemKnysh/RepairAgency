@@ -69,6 +69,10 @@
     </context-param>
     <!--    ADMIN URLs    -->
     <context-param>
+        <param-name>adminHomeUrl</param-name>
+        <param-value>/RepairAgency/admin/home</param-value>
+    </context-param>
+    <context-param>
         <param-name>adminUserListUrl</param-name>
         <param-value>/RepairAgency/admin/user/list</param-value>
     </context-param>
@@ -81,6 +85,10 @@
         <param-value>/RepairAgency/common/logout</param-value>
     </context-param>
     <!--    CUSTOMER URLs    -->
+    <context-param>
+        <param-name>customerHomeUrl</param-name>
+        <param-value>/RepairAgency/customer/home</param-value>
+    </context-param>
     <context-param>
         <param-name>customerUserEditUrl</param-name>
         <param-value>/RepairAgency/common/user/edit</param-value>
@@ -150,6 +158,10 @@
         <param-value>/RepairAgency/common/logout</param-value>
     </context-param>
     <!--    MANAGER URLs    -->
+    <context-param>
+        <param-name>managerHomeUrl</param-name>
+        <param-value>/RepairAgency/manager/home</param-value>
+    </context-param>
     <context-param>
         <param-name>managerUserEditUrl</param-name>
         <param-value>/RepairAgency/common/user/edit</param-value>
@@ -223,6 +235,10 @@
         <param-value>/RepairAgency/common/logout</param-value>
     </context-param>
     <!--    MASTER URLs    -->
+    <context-param>
+        <param-name>masterHomeUrl</param-name>
+        <param-value>/RepairAgency/master/home</param-value>
+    </context-param>
     <context-param>
         <param-name>masterUserEditUrl</param-name>
         <param-value>/RepairAgency/common/user/edit</param-value>
