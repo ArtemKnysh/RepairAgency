@@ -22,7 +22,7 @@ public class LogoutPostCommand implements Command {
     @Override
     public void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.info("{}: {}", request.getMethod(), WebUtil.getUrlPattern(request));
-        request.getSession().invalidate();
+        request.getSession().setAttribute("loggedUser", null);
         response.sendRedirect(WebUtil.getAppName(request) + "/login");
     }
 
