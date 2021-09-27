@@ -260,4 +260,11 @@ public class FeedbackRepositoryImpl extends AbstractRepository<Feedback> impleme
         query += " LIMIT " + offset + ", " + amount;
         return findAllByQueryWithParameters(connection, query, filterParam.getValue(filterValue));
     }
+
+    @Override
+    public Feedback findByCustomerIdAndMasterIdIncludeHidden(Connection connection, long customerId, long masterId) throws SQLException, NotFoundException {
+        String sql = getSelectQuery();
+        sql += " WHERE customer_id = ? AND master_id = ?";
+        return findByQueryWithParameters(connection, sql, customerId, masterId);
+    }
 }

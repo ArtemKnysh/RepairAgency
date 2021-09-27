@@ -47,4 +47,6 @@ public interface FeedbackService extends GenericService<Feedback> {
     int findCountOfFeedbacks(FeedbackFilterParameter filterParam, String filterValue) throws DBException;
 
     List<Feedback> findAll(int offset, int amount, FeedbackSortingParameter sortingParam, SortingType sortingType, FeedbackFilterParameter filterParam, String filterValue) throws DBException, NotFoundException;
+
+    Feedback findByCustomerIdAndMasterIdIncludeHidden(long customerId, long masterId) throws DBException;
 }

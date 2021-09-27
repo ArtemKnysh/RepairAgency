@@ -243,4 +243,19 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
             DBUtil.close(connection);
         }
     }
+
+    @Override
+    public Feedback findByCustomerIdAndMasterIdIncludeHidden(long customerId, long masterId) throws DBException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findByCustomerIdAndMasterIdIncludeHidden(connection, customerId, masterId);
+        } catch (SQLException | NotFoundException e) {
+            throw new DBException("Can't find feedback with customerId '" + customerId + "' " +
+                    "and masterId '" + masterId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+
+    }
 }

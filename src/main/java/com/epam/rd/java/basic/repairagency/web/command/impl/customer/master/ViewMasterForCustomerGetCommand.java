@@ -51,17 +51,18 @@ public class ViewMasterForCustomerGetCommand extends GetCommand {
 
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
         if (repairRequestService.findAllByCustomerIdAndMasterIdAndStatusCompleted(userId, master.getId()).size() > 0) {
+            request.setAttribute("isCustomerCanLeaveFeedbackForMaster", true);
             try {
-                Feedback feedback = feedbackService.findByCustomerIdAndMasterId(userId, masterId);
-                request.setAttribute("isCustomerCanLeaveFeedbackForMaster", true);
-                request.setAttribute("customerFeedback", feedback);
-            } catch (Exception e) {
-                request.setAttribute("isCustomerCanLeaveFeedbackForMaster", false);
-                request.setAttribute("customerFeedback", new Feedback());
+                Feedback feedback = feedbackService.findByCustomerIdAndMasterIdIncludeHidden(userId, masterId);
+                if (!feedback.getIsHidden()) {
+                    request.setAttribute("customerFeedback", feedback);
+                } else {
+                    request.setAttribute("isCustomerCanLeaveFeedbackForMaster", false);
+                }
+            } catch (Exception ignored) {
             }
         } else {
             request.setAttribute("isCustomerCanLeaveFeedbackForMaster", false);
-            request.setAttribute("customerFeedback", new Feedback());
         }
         List<Feedback> masterFeedbacks = feedbackService.findAllByMasterIdExceptCustomerIdExcludeHidden(masterId, userId);
         request.setAttribute("masterFeedbacks", masterFeedbacks);

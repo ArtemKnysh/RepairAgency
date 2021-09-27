@@ -55,4 +55,6 @@ public interface FeedbackRepository extends GenericRepository<Feedback> {
     List<Feedback> findAll(Connection connection, int offset, int amount, FeedbackSortingParameter sortingParam,
                            SortingType sortingType, FeedbackFilterParameter filterParam, String filterValue
     ) throws SQLException, NotFoundException;
+
+    Feedback findByCustomerIdAndMasterIdIncludeHidden(Connection connection, long customerId, long masterId) throws SQLException, NotFoundException;
 }
