@@ -50,9 +50,18 @@
         </attribute>
     </tag>
     <function>
+        <name>formatLocalDateTime</name>
+        <function-class>
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
+        </function-class>
+        <function-signature>
+            java.lang.String formatLocalDateTime(java.time.LocalDateTime)
+        </function-signature>
+    </function>
+    <function>
         <name>isRepairRequestStatusCanBeChangedByRole</name>
         <function-class>
-            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
         </function-class>
         <function-signature>
             boolean isRepairRequestStatusCanBeChangedByRole(
@@ -63,7 +72,7 @@
     <function>
         <name>isRepairRequestCostCanBeChangedByRole</name>
         <function-class>
-            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
         </function-class>
         <function-signature>
             boolean isRepairRequestCostCanBeChangedByRole(
@@ -74,7 +83,7 @@
     <function>
         <name>isRepairRequestCanBeCanceled</name>
         <function-class>
-            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
         </function-class>
         <function-signature>
             boolean isRepairRequestCanBeCanceled(
@@ -84,7 +93,7 @@
     <function>
         <name>isRepairRequestCanBeEdited</name>
         <function-class>
-            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
         </function-class>
         <function-signature>
             boolean isRepairRequestCanBeEdited(
@@ -94,7 +103,7 @@
     <function>
         <name>isRepairRequestMasterCanBeChangedByRole</name>
         <function-class>
-            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
         </function-class>
         <function-signature>
             boolean isRepairRequestMasterCanBeChangedByRole(
@@ -105,7 +114,7 @@
     <function>
         <name>isRepairRequestCanBePaidByCustomer</name>
         <function-class>
-            com.epam.rd.java.basic.repairagency.util.entity.EntityUtil
+            com.epam.rd.java.basic.repairagency.util.HtmlHelperFunctions
         </function-class>
         <function-signature>
             boolean isRepairRequestCanBePaidByRole(
