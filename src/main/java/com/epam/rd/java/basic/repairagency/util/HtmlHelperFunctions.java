@@ -1,10 +1,17 @@
-package com.epam.rd.java.basic.repairagency.util.entity;
+package com.epam.rd.java.basic.repairagency.util;
 
 import com.epam.rd.java.basic.repairagency.entity.RepairRequest;
 import com.epam.rd.java.basic.repairagency.entity.RepairRequestStatus;
 import com.epam.rd.java.basic.repairagency.entity.UserRole;
 
-public class EntityUtil {
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class HtmlHelperFunctions {
+
+    public static String formatLocalDateTime(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
 
     public static boolean isRepairRequestStatusCanBeChangedByRole(RepairRequest repairRequest, String roleAsString) {
         UserRole role = UserRole.valueOf(UserRole.class, roleAsString);
