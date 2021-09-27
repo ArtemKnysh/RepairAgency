@@ -12,8 +12,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/manager/feedback/show")
 @ProcessMethods(Method.POST)
@@ -27,13 +29,13 @@ public class ShowFeedbackForManagerPostCommand extends PostCommandWithRedirectio
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Feedback was successfully shown";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Feedback was successfully shown");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Can't show feedback";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Can't show feedback");
     }
 
     @Override
@@ -42,7 +44,7 @@ public class ShowFeedbackForManagerPostCommand extends PostCommandWithRedirectio
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException, NotFoundException {
         long feedbackId = Long.parseLong(request.getParameter("feedbackId"));
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
         feedbackService.show(feedbackId);

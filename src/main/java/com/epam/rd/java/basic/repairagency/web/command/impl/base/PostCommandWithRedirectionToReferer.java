@@ -10,18 +10,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class PostCommandWithRedirectionToReferer implements Command {
 
     protected abstract Logger getLogger();
 
-    protected abstract String getSuccessMessage(HttpServletRequest request);
+    protected abstract Optional<String> getSuccessMessage(HttpServletRequest request);
 
-    protected abstract String getErrorMessage(HttpServletRequest request);
+    protected abstract Optional<String> getErrorMessage(HttpServletRequest request);
 
     protected abstract String getDefaultAddress(HttpServletRequest request);
 
-    protected abstract void processRequest(HttpServletRequest request) throws Exception;
+    protected abstract void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
     @Override
     public final void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

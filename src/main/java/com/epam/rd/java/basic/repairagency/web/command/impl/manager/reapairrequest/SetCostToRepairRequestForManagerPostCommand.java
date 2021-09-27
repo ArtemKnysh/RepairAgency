@@ -11,6 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/manager/repair-request/set-cost")
 @ProcessMethods(Method.POST)
@@ -24,13 +26,13 @@ public class SetCostToRepairRequestForManagerPostCommand extends PostCommandWith
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Cost was successfully set";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Cost was successfully set");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Cost wasn't set. Please try again";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Cost wasn't set. Please try again");
     }
 
     @Override
@@ -39,7 +41,7 @@ public class SetCostToRepairRequestForManagerPostCommand extends PostCommandWith
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException {
         long repairRequestId = Long.parseLong(request.getParameter("repairRequestId"));
         double cost = Double.parseDouble(request.getParameter("cost"));
         RepairRequestService repairRequestService = (RepairRequestService)

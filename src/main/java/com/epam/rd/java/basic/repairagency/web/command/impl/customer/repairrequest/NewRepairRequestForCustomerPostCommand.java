@@ -13,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/customer/repair-request/new")
 @ProcessMethods(Method.POST)
@@ -26,13 +28,13 @@ public class NewRepairRequestForCustomerPostCommand extends PostCommandWithRedir
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Repair request was successfully created";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Repair request was successfully created");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Creating new repair request wasn't complete. Please try again";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Creating new repair request wasn't complete. Please try again");
     }
 
     @Override
@@ -41,7 +43,7 @@ public class NewRepairRequestForCustomerPostCommand extends PostCommandWithRedir
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException, NotFoundException {
         RepairRequest newRepairRequest = new RepairRequest();
         newRepairRequest.setDescription(request.getParameter("description"));
         newRepairRequest.setCustomer(WebUtil.getLoggedUser(request));

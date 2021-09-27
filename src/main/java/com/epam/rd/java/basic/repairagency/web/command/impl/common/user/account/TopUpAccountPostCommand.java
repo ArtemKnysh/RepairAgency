@@ -11,6 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/common/user/account/top-up")
 @ProcessMethods(Method.POST)
@@ -24,13 +26,13 @@ public class TopUpAccountPostCommand extends PostCommandWithRedirectionToReferer
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Account top-up was successfully completed";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Account top-up was successfully completed");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Can't top-up account";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Can't top-up account");
     }
 
     @Override
@@ -39,7 +41,7 @@ public class TopUpAccountPostCommand extends PostCommandWithRedirectionToReferer
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws Exception {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         double amount = Double.parseDouble(request.getParameter("amount"));
         AccountTransaction accountTransaction = new AccountTransaction();
         accountTransaction.setUserId(WebUtil.getLoggedUser(request).getId());

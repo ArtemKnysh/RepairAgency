@@ -13,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/customer/repair-request/edit-description")
 @ProcessMethods(Method.POST)
@@ -26,13 +28,13 @@ public class EditRepairRequestForCustomerPostCommand extends PostCommandWithRedi
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Repair request description was successfully edited";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Repair request description was successfully edited");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Can't edit repair request description";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Can't edit repair request description");
     }
 
     @Override
@@ -42,7 +44,7 @@ public class EditRepairRequestForCustomerPostCommand extends PostCommandWithRedi
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException, NotFoundException {
         long repairRequestId = Long.parseLong(request.getParameter("repairRequestId"));
         String description = request.getParameter("description");
         RepairRequestService repairRequestService = (RepairRequestService)

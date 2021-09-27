@@ -13,8 +13,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/customer/feedback/edit")
 @ProcessMethods(Method.POST)
@@ -28,13 +30,13 @@ public class EditFeedbackTextForCustomerPostCommand extends PostCommandWithRedir
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Feedback text was successfully saved";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Feedback text was successfully saved");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Can't save feedback text";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Can't save feedback text");
     }
 
     @Override
@@ -43,7 +45,7 @@ public class EditFeedbackTextForCustomerPostCommand extends PostCommandWithRedir
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException, NotFoundException {
         long masterId = Long.parseLong(request.getParameter("masterId"));
         String text = request.getParameter("text");
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);

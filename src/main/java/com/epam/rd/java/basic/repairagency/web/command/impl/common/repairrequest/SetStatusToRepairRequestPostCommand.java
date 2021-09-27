@@ -12,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @ProcessUrlPatterns({"/master/repair-request/set-status", "/manager/repair-request/set-status"})
 @ProcessMethods(Method.POST)
@@ -25,13 +27,13 @@ public class SetStatusToRepairRequestPostCommand extends PostCommandWithRedirect
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Status was successfully set";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Status was successfully set");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Status wasn't set. Please try again";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Status wasn't set. Please try again");
     }
 
     @Override
@@ -41,7 +43,7 @@ public class SetStatusToRepairRequestPostCommand extends PostCommandWithRedirect
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException {
         long repairRequestId = Long.parseLong(request.getParameter("repairRequestId"));
         RepairRequestStatus status = RepairRequestStatus.valueOf(RepairRequestStatus.class,
                 request.getParameter("status"));

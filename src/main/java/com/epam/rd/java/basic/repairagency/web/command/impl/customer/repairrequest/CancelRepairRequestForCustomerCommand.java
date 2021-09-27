@@ -13,6 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @ProcessUrlPatterns("/customer/repair-request/cancel")
 @ProcessMethods(Method.POST)
@@ -26,13 +28,13 @@ public class CancelRepairRequestForCustomerCommand extends PostCommandWithRedire
     }
 
     @Override
-    protected String getSuccessMessage(HttpServletRequest request) {
-        return "Repair request was successfully cancelled";
+    protected Optional<String> getSuccessMessage(HttpServletRequest request) {
+        return Optional.of("Repair request was successfully cancelled");
     }
 
     @Override
-    protected String getErrorMessage(HttpServletRequest request) {
-        return "Can't cancel repair request";
+    protected Optional<String> getErrorMessage(HttpServletRequest request) {
+        return Optional.of("Can't cancel repair request");
     }
 
     @Override
@@ -41,7 +43,7 @@ public class CancelRepairRequestForCustomerCommand extends PostCommandWithRedire
     }
 
     @Override
-    protected void processRequest(HttpServletRequest request) throws DBException, NotFoundException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws DBException, NotFoundException {
         long repairRequestId = Long.parseLong(request.getParameter("repairRequestId"));
         RepairRequestService repairRequestService = (RepairRequestService)
                 WebUtil.getService(request, RepairRequestService.class);
