@@ -39,7 +39,7 @@ Repair Agency is a Web Application developed to perform functionality of repair 
 
 ## Building & Running the Project:
 
-1. Install a server Apache Tomcat v8.X
+1. Install a server Apache Tomcat v9.X
 2. Open MySQL in your workspace, initialize database from `mysql-sripts/init.sql` and start MySQL server
 3. Clone the project into IDE on your local machine
 4. Check database credentials in `src/main/webapp/META-INF/context.xml` and change username or password if needed
