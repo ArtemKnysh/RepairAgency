@@ -49,6 +49,7 @@ public class RegistrationPostCommand extends PostCommand {
 
     @Override
     protected String getSuccessAddress(HttpServletRequest request) {
-        return WebUtil.getAppName(request);
+        String role = WebUtil.getLoggedUser(request).getRole().toString().toLowerCase();
+        return WebUtil.getAppName(request) + "/" + role + "/home";
     }
 }
