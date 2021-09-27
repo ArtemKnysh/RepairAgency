@@ -37,7 +37,7 @@ public class ListFeedbacksForMasterGetCommand extends GetListWithSortingAndPagin
     protected int getCountOfEntities(HttpServletRequest request) throws DBException {
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
         long masterId = WebUtil.getLoggedUser(request).getId();
-        return feedbackService.findCountOfFeedbacksByMasterId(masterId);
+        return feedbackService.findCountOfFeedbacksByMasterIdExcludeHidden(masterId);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ListFeedbacksForMasterGetCommand extends GetListWithSortingAndPagin
         long masterId = WebUtil.getLoggedUser(request).getId();
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
         FeedbackSortingParameter feedbackSortingParameter = FeedbackSortingParameter.getByFieldName(sortingParameter);
-        return feedbackService.findAllByMasterId(masterId, offset, rowsNumber, feedbackSortingParameter, sortingType);
+        return feedbackService.findAllByMasterIdExcludeHidden(masterId, offset, rowsNumber, feedbackSortingParameter, sortingType);
 
     }
 }

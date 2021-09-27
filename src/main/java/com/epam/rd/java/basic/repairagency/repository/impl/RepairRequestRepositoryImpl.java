@@ -226,7 +226,7 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
     }
 
     @Override
-    public List<RepairRequest> findAllByMasterId(Connection connection, long masterId) throws SQLException, NotFoundException {
+    public List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(Connection connection, long masterId) throws SQLException, NotFoundException {
         List<RepairRequest> result;
         String sql = getSelectQuery();
         sql += " WHERE master_id = ? ORDER BY create_time DESC;";
@@ -254,10 +254,10 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
     }
 
     @Override
-    public int findCountOfRepairRequestsByMasterId(Connection connection, long masterId) throws SQLException {
+    public int findCountOfRepairRequestsByMasterIdMoreThenPaid(Connection connection, long masterId) throws SQLException {
         String sql = getSelectCountQuery();
-        sql += " WHERE master_id = ?";
-        return findIntValueByQueryWithParameters(connection, sql, masterId);
+        sql += " WHERE master_id = ? AND status_id > ?";
+        return findIntValueByQueryWithParameters(connection, sql, masterId, RepairRequestStatus.PAID.getId());
     }
 
     @Override
@@ -284,11 +284,11 @@ public class RepairRequestRepositoryImpl extends AbstractRepository<RepairReques
     }
 
     @Override
-    public List<RepairRequest> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
-                                                 RepairRequestSortingParameter sortingParam, SortingType sortingType
+    public List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(Connection connection, long masterId, int offset, int amount,
+                                                                      RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException {
         String query = getSelectWithMasterAndCustomerFullNameQuery();
-        query += " WHERE master_id = ?";
+        query += " WHERE master_id = ? AND status_id > " + RepairRequestStatus.PAID.getId();
         query += " ORDER BY " + sortingParam.getColumnName();
         query += " " + sortingType.getType();
         query += " LIMIT " + offset + ", " + amount;

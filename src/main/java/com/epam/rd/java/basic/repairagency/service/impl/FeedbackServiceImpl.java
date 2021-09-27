@@ -32,11 +32,11 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public Feedback findByCustomerIdAndMasterId(long customerId, long masterId) throws NotFoundException, DBException {
+    public Feedback findByCustomerIdAndMasterIdExcludeHidden(long customerId, long masterId) throws NotFoundException, DBException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findByCustomerIdAndMasterId(connection, customerId, masterId);
+            return repository.findByCustomerIdAndMasterIdExcludeHidden(connection, customerId, masterId);
         } catch (SQLException e) {
             throw new DBException("Can't find feedback with customerId '" + customerId + "' " +
                     "and masterId '" + masterId + "' in DB", e);
@@ -59,14 +59,27 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public List<Feedback> findAllByMasterIdExceptCustomerId(long masterId, long customerId) throws DBException, NotFoundException {
+    public List<Feedback> findAllByMasterIdExceptCustomerIdExcludeHidden(long masterId, long customerId) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findAllByMasterIdExceptCustomerId(connection, masterId, customerId);
+            return repository.findAllByMasterIdExceptCustomerIdExcludeHidden(connection, masterId, customerId);
         } catch (SQLException e) {
             throw new DBException("Can't find feedback with masterId '" + masterId + "' " +
                     "except customerId '" + customerId + "' in DB", e);
+        } finally {
+            DBUtil.close(connection);
+        }
+    }
+
+    @Override
+    public List<Feedback> findAllByCustomerIdExcludeHidden(long customerId) throws DBException, NotFoundException {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            return repository.findAllByCustomerIdExcludeHidden(connection, customerId);
+        } catch (SQLException e) {
+            throw new DBException("Can't find feedbacks with customerId '" + customerId + "' in DB", e);
         } finally {
             DBUtil.close(connection);
         }
@@ -86,13 +99,13 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public List<Feedback> findAllByCustomerIdIncludeHidden(long customerId) throws DBException, NotFoundException {
+    public List<Feedback> findAllByMasterIdExcludeHidden(long masterId) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findAllByCustomerIdIncludeHidden(connection, customerId);
+            return repository.findAllByMasterIdExcludeHidden(connection, masterId);
         } catch (SQLException e) {
-            throw new DBException("Can't find feedbacks with customerId '" + customerId + "' in DB", e);
+            throw new DBException("Can't find feedbacks with masterId '" + masterId + "' in DB", e);
         } finally {
             DBUtil.close(connection);
         }
@@ -104,19 +117,6 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
         try {
             connection = getConnection();
             return repository.findAllByMasterId(connection, masterId);
-        } catch (SQLException e) {
-            throw new DBException("Can't find feedbacks with masterId '" + masterId + "' in DB", e);
-        } finally {
-            DBUtil.close(connection);
-        }
-    }
-
-    @Override
-    public List<Feedback> findAllByMasterIdIncludeHidden(long masterId) throws DBException, NotFoundException {
-        Connection connection = null;
-        try {
-            connection = getConnection();
-            return repository.findAllByMasterIdIncludeHidden(connection, masterId);
         } catch (SQLException e) {
             throw new DBException("Can't find feedbacks with masterId '" + masterId + "' in DB", e);
         } finally {
@@ -164,11 +164,11 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public int findCountOfFeedbacksByCustomerId(long customerId) throws DBException {
+    public int findCountOfFeedbacksByCustomerIdExcludeHidden(long customerId) throws DBException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findCountOfFeedbacksByCustomerId(connection, customerId);
+            return repository.findCountOfFeedbacksByCustomerIdExcludeHidden(connection, customerId);
         } catch (SQLException e) {
             throw new DBException("Can't find count of feedbacks by customerId '" + customerId + "'", e);
         } finally {
@@ -177,11 +177,11 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public int findCountOfFeedbacksByMasterId(long masterId) throws DBException {
+    public int findCountOfFeedbacksByMasterIdExcludeHidden(long masterId) throws DBException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findCountOfFeedbacksByMasterId(connection, masterId);
+            return repository.findCountOfFeedbacksByMasterIdExcludeHidden(connection, masterId);
         } catch (SQLException e) {
             throw new DBException("Can't find count of feedbacks by masterId '" + masterId + "'", e);
         } finally {
@@ -190,13 +190,13 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public List<Feedback> findAllByCustomerId(long customerId, int offset, int amount,
-                                              FeedbackSortingParameter sortingParam, SortingType sortingType
+    public List<Feedback> findAllByCustomerIdExcludeHidden(long customerId, int offset, int amount,
+                                                           FeedbackSortingParameter sortingParam, SortingType sortingType
     ) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findAllByCustomerId(connection, customerId, offset, amount, sortingParam, sortingType);
+            return repository.findAllByCustomerIdExcludeHidden(connection, customerId, offset, amount, sortingParam, sortingType);
         } catch (SQLException e) {
             throw new DBException("Can't find feedbacks with customerId '" + customerId + "' in DB", e);
         } finally {
@@ -205,12 +205,12 @@ public class FeedbackServiceImpl extends AbstractService<Feedback> implements Fe
     }
 
     @Override
-    public List<Feedback> findAllByMasterId(long masterId, int offset, int amount,
-                                            FeedbackSortingParameter sortingParam, SortingType sortingType) throws DBException, NotFoundException {
+    public List<Feedback> findAllByMasterIdExcludeHidden(long masterId, int offset, int amount,
+                                                         FeedbackSortingParameter sortingParam, SortingType sortingType) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findAllByMasterId(connection, masterId, offset, amount, sortingParam, sortingType);
+            return repository.findAllByMasterIdExcludeHidden(connection, masterId, offset, amount, sortingParam, sortingType);
         } catch (SQLException e) {
             throw new DBException("Can't find feedbacks with masterId '" + masterId + "' in DB", e);
         } finally {

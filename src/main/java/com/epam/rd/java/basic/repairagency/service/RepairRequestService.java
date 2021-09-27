@@ -27,7 +27,7 @@ public interface RepairRequestService extends GenericService<RepairRequest> {
 
     void setMasterToRepairRequest(long repairRequestId, long masterId) throws DBException;
 
-    List<RepairRequest> findAllByMasterId(long masterId) throws DBException, NotFoundException;
+    List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(long masterId) throws DBException, NotFoundException;
 
     void removeMasterFromRepairRequest(long repairRequestId) throws DBException;
 
@@ -40,7 +40,7 @@ public interface RepairRequestService extends GenericService<RepairRequest> {
 
     int findCountOfRepairRequestsByCustomerId(long customerId) throws DBException;
 
-    int findCountOfRepairRequestsByMasterId(long masterId) throws DBException;
+    int findCountOfRepairRequestsByMasterIdAndStatusMoreThenPaid(long masterId) throws DBException;
 
     List<RepairRequest> findAll(int offset, int amount,
                                 RepairRequestSortingParameter sortingParam, SortingType sortingType
@@ -50,8 +50,8 @@ public interface RepairRequestService extends GenericService<RepairRequest> {
                                             RepairRequestSortingParameter sortingParameter, SortingType sortingType
     ) throws DBException, NotFoundException;
 
-    List<RepairRequest> findAllByMasterId(long masterId, int offset, int amount,
-                                          RepairRequestSortingParameter sortingParam, SortingType sortingType
+    List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(long masterId, int offset, int amount,
+                                                               RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws DBException, NotFoundException;
 
     List<RepairRequest> findAll(int offset, int amount, RepairRequestSortingParameter sortingParam,

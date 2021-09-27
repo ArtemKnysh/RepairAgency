@@ -24,7 +24,7 @@ public interface RepairRequestRepository extends GenericRepository<RepairRequest
 
     void setMasterToRepairRequest(Connection connection, long repairRequestId, long masterId) throws SQLException;
 
-    List<RepairRequest> findAllByMasterId(Connection connection, long masterId) throws SQLException, NotFoundException;
+    List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(Connection connection, long masterId) throws SQLException, NotFoundException;
 
     List<RepairRequest> findAllByCustomer(Connection connection, User customer) throws SQLException, NotFoundException;
 
@@ -42,7 +42,7 @@ public interface RepairRequestRepository extends GenericRepository<RepairRequest
 
     int findCountOfRepairRequestsByCustomerId(Connection connection, long customerId) throws SQLException;
 
-    int findCountOfRepairRequestsByMasterId(Connection connection, long masterId) throws SQLException;
+    int findCountOfRepairRequestsByMasterIdMoreThenPaid(Connection connection, long masterId) throws SQLException;
 
     List<RepairRequest> findAll(Connection connection, int offset, int amount,
                                 RepairRequestSortingParameter sortingParam, SortingType sortingType
@@ -52,8 +52,8 @@ public interface RepairRequestRepository extends GenericRepository<RepairRequest
                                             RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException;
 
-    List<RepairRequest> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
-                                          RepairRequestSortingParameter sortingParam, SortingType sortingType
+    List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(Connection connection, long masterId, int offset, int amount,
+                                                               RepairRequestSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException;
 
     List<RepairRequest> findAll(Connection connection, int offset, int amount,

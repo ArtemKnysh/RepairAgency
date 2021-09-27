@@ -40,7 +40,7 @@ public class ViewCustomerForCustomerGetCommand extends GetCommand {
         User customer = userService.findCustomerById(customerId);
         request.setAttribute("customer", customer);
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
-        List<Feedback> customerFeedbacks = feedbackService.findAllByCustomerId(customerId);
+        List<Feedback> customerFeedbacks = feedbackService.findAllByCustomerIdExcludeHidden(customerId);
         request.setAttribute("customerFeedbacks", customerFeedbacks);
     }
 }

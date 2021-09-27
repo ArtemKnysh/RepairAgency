@@ -48,7 +48,7 @@ public class ViewCustomerForManagerGetCommand extends GetCommand {
         List<User> masters = userService.findAllByRole(UserRole.MASTER);
         request.setAttribute("listMasters", masters);
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
-        List<Feedback> customerFeedbacks = feedbackService.findAllByCustomerIdIncludeHidden(customerId);
+        List<Feedback> customerFeedbacks = feedbackService.findAllByCustomerId(customerId);
         request.setAttribute("customerFeedbacks", customerFeedbacks);
         if (request.getParameter("activeTab") == null) {
             request.setAttribute("activeTab", "repairRequests");

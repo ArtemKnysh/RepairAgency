@@ -38,7 +38,7 @@ public class ListRepairRequestsForMasterGetCommand extends GetListWithSortingAnd
         RepairRequestService repairRequestService = (RepairRequestService)
                 WebUtil.getService(request, RepairRequestService.class);
         long masterId = WebUtil.getLoggedUser(request).getId();
-        return repairRequestService.findCountOfRepairRequestsByMasterId(masterId);
+        return repairRequestService.findCountOfRepairRequestsByMasterIdAndStatusMoreThenPaid(masterId);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class ListRepairRequestsForMasterGetCommand extends GetListWithSortingAnd
         RepairRequestService repairRequestService = (RepairRequestService)
                 WebUtil.getService(request, RepairRequestService.class);
         RepairRequestSortingParameter repairRequestSortingParameter = RepairRequestSortingParameter.getByFieldName(sortingParameter);
-        return repairRequestService.findAllByMasterId(masterId, offset, rowsNumber, repairRequestSortingParameter, sortingType);
+        return repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(masterId, offset, rowsNumber, repairRequestSortingParameter, sortingType);
     }
 }

@@ -47,7 +47,7 @@ public class ViewCustomerForMasterGetCommand extends GetCommand {
         request.setAttribute("customerRepairRequests", customerRepairRequests);
         try {
             FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
-            Feedback customerFeedback = feedbackService.findByCustomerIdAndMasterId(customerId, masterId);
+            Feedback customerFeedback = feedbackService.findByCustomerIdAndMasterIdExcludeHidden(customerId, masterId);
             request.setAttribute("customerFeedback", customerFeedback);
         } catch (Exception ignored) {
         }

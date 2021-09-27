@@ -176,7 +176,7 @@ public class FeedbackServiceTest extends ServiceTest {
             userService.insert(master);
             Feedback feedback = createFeedback(1, customer.getId(), master.getId());
             feedbackService.insert(feedback);
-            Feedback feedbackFromDB = feedbackService.findByCustomerIdAndMasterId(customer.getId(), master.getId());
+            Feedback feedbackFromDB = feedbackService.findByCustomerIdAndMasterIdExcludeHidden(customer.getId(), master.getId());
             assertTrue(isFeedbacksEquals(feedback, feedbackFromDB));
         } catch (DBException | NotFoundException e) {
             fail(e.getMessage());
@@ -194,7 +194,7 @@ public class FeedbackServiceTest extends ServiceTest {
             feedbackService.insert(feedback);
             feedbackService.hide(feedback.getId());
             try {
-                feedbackService.findByCustomerIdAndMasterId(customer.getId(), master.getId());
+                feedbackService.findByCustomerIdAndMasterIdExcludeHidden(customer.getId(), master.getId());
                 fail();
             } catch (NotFoundException ignored) {
 
@@ -217,7 +217,7 @@ public class FeedbackServiceTest extends ServiceTest {
             fail(e.getMessage());
         }
         try {
-            feedbackService.findByCustomerIdAndMasterId(customer.getId() + 1, master.getId());
+            feedbackService.findByCustomerIdAndMasterIdExcludeHidden(customer.getId() + 1, master.getId());
             fail();
         } catch (NotFoundException ignored) {
 
@@ -225,7 +225,7 @@ public class FeedbackServiceTest extends ServiceTest {
             fail(e.getMessage());
         }
         try {
-            feedbackService.findByCustomerIdAndMasterId(customer.getId(), master.getId() + 1);
+            feedbackService.findByCustomerIdAndMasterIdExcludeHidden(customer.getId(), master.getId() + 1);
             fail();
         } catch (NotFoundException ignored) {
 
@@ -233,7 +233,7 @@ public class FeedbackServiceTest extends ServiceTest {
             fail(e.getMessage());
         }
         try {
-            feedbackService.findByCustomerIdAndMasterId(customer.getId() + 1, master.getId() + 1);
+            feedbackService.findByCustomerIdAndMasterIdExcludeHidden(customer.getId() + 1, master.getId() + 1);
             fail();
         } catch (NotFoundException ignored) {
 
@@ -261,7 +261,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer2.getId(), master.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterIdExceptCustomerId(master.getId(), customer1.getId());
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterIdExceptCustomerIdExcludeHidden(master.getId(), customer1.getId());
             assertEquals(1, feedbacksFromDB.size());
             assertFalse(feedbacksFromDB.contains(feedback1));
             assertTrue(feedbacksFromDB.contains(feedback2));
@@ -290,7 +290,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer1.getId(), master.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByCustomerId(customer1.getId());
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByCustomerIdExcludeHidden(customer1.getId());
             assertEquals(1, feedbacksFromDB.size());
             assertTrue(feedbacksFromDB.contains(feedback1));
             assertFalse(feedbacksFromDB.contains(feedback2));
@@ -319,7 +319,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer1.getId(), master.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByCustomerIdIncludeHidden(customer1.getId());
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByCustomerId(customer1.getId());
             assertEquals(2, feedbacksFromDB.size());
             assertTrue(feedbacksFromDB.contains(feedback1));
             assertFalse(feedbacksFromDB.contains(feedback2));
@@ -348,7 +348,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer.getId(), master1.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterId(master1.getId());
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterIdExcludeHidden(master1.getId());
             assertEquals(1, feedbacksFromDB.size());
             assertFalse(feedbacksFromDB.contains(feedback1));
             assertTrue(feedbacksFromDB.contains(feedback2));
@@ -377,7 +377,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer.getId(), master1.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterIdIncludeHidden(master1.getId());
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterId(master1.getId());
             assertEquals(2, feedbacksFromDB.size());
             assertFalse(feedbacksFromDB.contains(feedback1));
             assertTrue(feedbacksFromDB.contains(feedback2));
@@ -464,7 +464,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer.getId(), master.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            int countOfFeedbacks = feedbackService.findCountOfFeedbacksByCustomerId(customer.getId());
+            int countOfFeedbacks = feedbackService.findCountOfFeedbacksByCustomerIdExcludeHidden(customer.getId());
             assertEquals(2, countOfFeedbacks);
         } catch (DBException | NotFoundException e) {
             fail(e.getMessage());
@@ -487,7 +487,7 @@ public class FeedbackServiceTest extends ServiceTest {
             Feedback feedback3 = createFeedback(3, customer.getId(), master.getId());
             feedbackService.insert(feedback3);
             feedbackService.hide(feedback3.getId());
-            int countOfFeedbacks = feedbackService.findCountOfFeedbacksByMasterId(master.getId());
+            int countOfFeedbacks = feedbackService.findCountOfFeedbacksByMasterIdExcludeHidden(master.getId());
             assertEquals(2, countOfFeedbacks);
         } catch (DBException | NotFoundException e) {
             fail(e.getMessage());
@@ -515,13 +515,13 @@ public class FeedbackServiceTest extends ServiceTest {
             feedbackService.hide(feedback3.getId());
             Feedback feedback4 = createFeedback(4, customer1.getId(), master.getId());
             feedbackService.insert(feedback4);
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByCustomerId(customer1.getId(), 0, 1, FeedbackSortingParameter.TEXT, SortingType.ASC);
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByCustomerIdExcludeHidden(customer1.getId(), 0, 1, FeedbackSortingParameter.TEXT, SortingType.ASC);
             assertEquals(1, feedbacksFromDB.size());
             assertTrue(feedbacksFromDB.contains(feedback1));
             assertFalse(feedbacksFromDB.contains(feedback2));
             assertFalse(feedbacksFromDB.contains(feedback3));
             assertFalse(feedbacksFromDB.contains(feedback4));
-            feedbacksFromDB = feedbackService.findAllByCustomerId(customer1.getId(), 1, 1, FeedbackSortingParameter.TEXT, SortingType.ASC);
+            feedbacksFromDB = feedbackService.findAllByCustomerIdExcludeHidden(customer1.getId(), 1, 1, FeedbackSortingParameter.TEXT, SortingType.ASC);
             assertEquals(1, feedbacksFromDB.size());
             assertFalse(feedbacksFromDB.contains(feedback1));
             assertFalse(feedbacksFromDB.contains(feedback2));
@@ -553,13 +553,13 @@ public class FeedbackServiceTest extends ServiceTest {
             feedbackService.hide(feedback3.getId());
             Feedback feedback4 = createFeedback(4, customer.getId(), master1.getId());
             feedbackService.insert(feedback4);
-            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterId(master1.getId(), 0, 1, FeedbackSortingParameter.TEXT, SortingType.DESC);
+            List<Feedback> feedbacksFromDB = feedbackService.findAllByMasterIdExcludeHidden(master1.getId(), 0, 1, FeedbackSortingParameter.TEXT, SortingType.DESC);
             assertEquals(1, feedbacksFromDB.size());
             assertFalse(feedbacksFromDB.contains(feedback1));
             assertFalse(feedbacksFromDB.contains(feedback2));
             assertFalse(feedbacksFromDB.contains(feedback3));
             assertTrue(feedbacksFromDB.contains(feedback4));
-            feedbacksFromDB = feedbackService.findAllByMasterId(master1.getId(), 1, 1, FeedbackSortingParameter.TEXT, SortingType.DESC);
+            feedbacksFromDB = feedbackService.findAllByMasterIdExcludeHidden(master1.getId(), 1, 1, FeedbackSortingParameter.TEXT, SortingType.DESC);
             assertEquals(1, feedbacksFromDB.size());
             assertFalse(feedbacksFromDB.contains(feedback1));
             assertTrue(feedbacksFromDB.contains(feedback2));

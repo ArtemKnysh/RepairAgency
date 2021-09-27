@@ -12,20 +12,20 @@ import java.util.List;
 
 public interface FeedbackRepository extends GenericRepository<Feedback> {
 
-    Feedback findByCustomerIdAndMasterId(Connection connection, long customerId, long masterId
+    Feedback findByCustomerIdAndMasterIdExcludeHidden(Connection connection, long customerId, long masterId
     ) throws SQLException, NotFoundException;
 
-    List<Feedback> findAllByMasterIdExceptCustomerId(Connection connection, long masterId, long customerId
+    List<Feedback> findAllByMasterIdExceptCustomerIdExcludeHidden(Connection connection, long masterId, long customerId
     ) throws SQLException, NotFoundException;
 
-    List<Feedback> findAllByCustomerId(Connection connection, long customerId) throws SQLException, NotFoundException;
+    List<Feedback> findAllByCustomerIdExcludeHidden(Connection connection, long customerId) throws SQLException, NotFoundException;
 
-    List<Feedback> findAllByCustomerIdIncludeHidden(Connection connection, long customerId
+    List<Feedback> findAllByCustomerId(Connection connection, long customerId
     ) throws SQLException, NotFoundException;
 
-    List<Feedback> findAllByMasterId(Connection connection, long masterId) throws SQLException, NotFoundException;
+    List<Feedback> findAllByMasterIdExcludeHidden(Connection connection, long masterId) throws SQLException, NotFoundException;
 
-    List<Feedback> findAllByMasterIdIncludeHidden(Connection connection, long masterId
+    List<Feedback> findAllByMasterId(Connection connection, long masterId
     ) throws SQLException, NotFoundException;
 
     void hide(Connection connection, long feedbackId) throws SQLException;
@@ -34,16 +34,16 @@ public interface FeedbackRepository extends GenericRepository<Feedback> {
 
     int findCountOfFeedbacks(Connection connection) throws SQLException;
 
-    int findCountOfFeedbacksByCustomerId(Connection connection, long customerId) throws SQLException;
+    int findCountOfFeedbacksByCustomerIdExcludeHidden(Connection connection, long customerId) throws SQLException;
 
-    int findCountOfFeedbacksByMasterId(Connection connection, long masterId) throws SQLException;
+    int findCountOfFeedbacksByMasterIdExcludeHidden(Connection connection, long masterId) throws SQLException;
 
-    List<Feedback> findAllByCustomerId(Connection connection, long customerId, int offset, int amount,
-                                       FeedbackSortingParameter sortingParam, SortingType sortingType
+    List<Feedback> findAllByCustomerIdExcludeHidden(Connection connection, long customerId, int offset, int amount,
+                                                    FeedbackSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException;
 
-    List<Feedback> findAllByMasterId(Connection connection, long masterId, int offset, int amount,
-                                     FeedbackSortingParameter sortingParam, SortingType sortingType
+    List<Feedback> findAllByMasterIdExcludeHidden(Connection connection, long masterId, int offset, int amount,
+                                                  FeedbackSortingParameter sortingParam, SortingType sortingType
     ) throws SQLException, NotFoundException;
 
     List<Feedback> findAll(Connection connection, int offset, int amount, FeedbackSortingParameter sortingParameter,

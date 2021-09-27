@@ -344,11 +344,11 @@ public class RepairRequestServiceTest extends ServiceTest {
             repairRequestService.insert(repairRequest2);
             repairRequestService.setMasterToRepairRequest(repairRequest2.getId(), master.getId());
             repairRequest2 = repairRequestService.findById(repairRequest2.getId());
-            List<RepairRequest> repairRequestsFromDB = repairRequestService.findAllByMasterId(master.getId());
+            List<RepairRequest> repairRequestsFromDB = repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(master.getId());
             assertEquals(2, repairRequestsFromDB.size());
             assertTrue(repairRequestsFromDB.contains(repairRequest1));
             assertTrue(repairRequestsFromDB.contains(repairRequest2));
-            repairRequestsFromDB = repairRequestService.findAllByMasterId(customer.getId());
+            repairRequestsFromDB = repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(customer.getId());
             assertTrue(repairRequestsFromDB.isEmpty());
         } catch (DBException | NotFoundException e) {
             fail(e.getMessage());
@@ -462,7 +462,7 @@ public class RepairRequestServiceTest extends ServiceTest {
             repairRequestService.setMasterToRepairRequest(repairRequest1.getId(), master.getId());
             RepairRequest repairRequest2 = createRepairRequest(2, customer.getId());
             repairRequestService.insert(repairRequest2);
-            int countOfRepairRequests = repairRequestService.findCountOfRepairRequestsByMasterId(master.getId());
+            int countOfRepairRequests = repairRequestService.findCountOfRepairRequestsByMasterIdAndStatusMoreThenPaid(master.getId());
             assertEquals(1, countOfRepairRequests);
         } catch (DBException | NotFoundException e) {
             fail(e.getMessage());
@@ -540,11 +540,11 @@ public class RepairRequestServiceTest extends ServiceTest {
             repairRequestService.insert(repairRequest2);
             repairRequestService.setMasterToRepairRequest(repairRequest2.getId(), master.getId());
             repairRequest2 = repairRequestService.findById(repairRequest2.getId());
-            List<RepairRequest> repairRequestsFromDB = repairRequestService.findAllByMasterId(master.getId(), 0, 1, RepairRequestSortingParameter.DESCRIPTION, SortingType.DESC);
+            List<RepairRequest> repairRequestsFromDB = repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(master.getId(), 0, 1, RepairRequestSortingParameter.DESCRIPTION, SortingType.DESC);
             assertEquals(1, repairRequestsFromDB.size());
             assertFalse(repairRequestsFromDB.contains(repairRequest1));
             assertTrue(repairRequestsFromDB.contains(repairRequest2));
-            repairRequestsFromDB = repairRequestService.findAllByMasterId(master.getId(), 1, 1, RepairRequestSortingParameter.DESCRIPTION, SortingType.ASC);
+            repairRequestsFromDB = repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(master.getId(), 1, 1, RepairRequestSortingParameter.DESCRIPTION, SortingType.ASC);
             assertEquals(1, repairRequestsFromDB.size());
             assertFalse(repairRequestsFromDB.contains(repairRequest1));
             assertTrue(repairRequestsFromDB.contains(repairRequest2));

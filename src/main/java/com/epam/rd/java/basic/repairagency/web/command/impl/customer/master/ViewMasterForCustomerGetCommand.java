@@ -63,7 +63,7 @@ public class ViewMasterForCustomerGetCommand extends GetCommand {
             request.setAttribute("isCustomerCanLeaveFeedbackForMaster", false);
             request.setAttribute("customerFeedback", new Feedback());
         }
-        List<Feedback> masterFeedbacks = feedbackService.findAllByMasterIdExceptCustomerId(masterId, userId);
+        List<Feedback> masterFeedbacks = feedbackService.findAllByMasterIdExceptCustomerIdExcludeHidden(masterId, userId);
         request.setAttribute("masterFeedbacks", masterFeedbacks);
         if (request.getParameter("activeTab") == null) {
             request.setAttribute("activeTab", "repairRequests");

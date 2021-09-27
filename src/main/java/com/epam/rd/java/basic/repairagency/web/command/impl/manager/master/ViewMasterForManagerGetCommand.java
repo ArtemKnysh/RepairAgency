@@ -43,10 +43,10 @@ public class ViewMasterForManagerGetCommand extends GetCommand {
         request.setAttribute("master", master);
         RepairRequestService repairRequestService = (RepairRequestService)
                 WebUtil.getService(request, RepairRequestService.class);
-        List<RepairRequest> masterRepairRequests = repairRequestService.findAllByMasterId(master.getId());
+        List<RepairRequest> masterRepairRequests = repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(master.getId());
         request.setAttribute("masterRepairRequests", masterRepairRequests);
         FeedbackService feedbackService = (FeedbackService) WebUtil.getService(request, FeedbackService.class);
-        List<Feedback> masterFeedbacks = feedbackService.findAllByMasterIdIncludeHidden(masterId);
+        List<Feedback> masterFeedbacks = feedbackService.findAllByMasterId(masterId);
         request.setAttribute("masterFeedbacks", masterFeedbacks);
         if (request.getParameter("activeTab") == null) {
             request.setAttribute("activeTab", "repairRequests");

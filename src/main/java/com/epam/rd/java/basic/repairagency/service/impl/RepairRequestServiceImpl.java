@@ -142,11 +142,11 @@ public class RepairRequestServiceImpl extends AbstractService<RepairRequest> imp
     }
 
     @Override
-    public List<RepairRequest> findAllByMasterId(long masterId) throws DBException, NotFoundException {
+    public List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(long masterId) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findAllByMasterId(connection, masterId);
+            return repository.findAllByMasterIdAndStatusMoreThenPaid(connection, masterId);
         } catch (SQLException e) {
             throw new DBException("Can't find repair request with masterId '" + masterId + "' in DB", e);
         } finally {
@@ -209,11 +209,11 @@ public class RepairRequestServiceImpl extends AbstractService<RepairRequest> imp
     }
 
     @Override
-    public int findCountOfRepairRequestsByMasterId(long masterId) throws DBException {
+    public int findCountOfRepairRequestsByMasterIdAndStatusMoreThenPaid(long masterId) throws DBException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findCountOfRepairRequestsByMasterId(connection, masterId);
+            return repository.findCountOfRepairRequestsByMasterIdMoreThenPaid(connection, masterId);
         } catch (SQLException e) {
             throw new DBException("Can't find count of repair requests with masterId '" + masterId + "'", e);
         } finally {
@@ -254,14 +254,14 @@ public class RepairRequestServiceImpl extends AbstractService<RepairRequest> imp
     }
 
     @Override
-    public List<RepairRequest> findAllByMasterId(long masterId, int offset, int amount,
-                                                 RepairRequestSortingParameter sortingParam,
-                                                 SortingType sortingType
+    public List<RepairRequest> findAllByMasterIdAndStatusMoreThenPaid(long masterId, int offset, int amount,
+                                                                      RepairRequestSortingParameter sortingParam,
+                                                                      SortingType sortingType
     ) throws DBException, NotFoundException {
         Connection connection = null;
         try {
             connection = getConnection();
-            return repository.findAllByMasterId(connection, masterId, offset, amount, sortingParam, sortingType);
+            return repository.findAllByMasterIdAndStatusMoreThenPaid(connection, masterId, offset, amount, sortingParam, sortingType);
         } catch (SQLException e) {
             throw new DBException("Can't find repair requests with masterId '" + masterId + "' in DB", e);
         } finally {

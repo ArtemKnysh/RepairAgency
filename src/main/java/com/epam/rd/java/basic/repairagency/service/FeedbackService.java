@@ -11,27 +11,27 @@ import java.util.List;
 
 public interface FeedbackService extends GenericService<Feedback> {
 
-    Feedback findByCustomerIdAndMasterId(long customerId, long masterId) throws NotFoundException, DBException;
+    Feedback findByCustomerIdAndMasterIdExcludeHidden(long customerId, long masterId) throws NotFoundException, DBException;
 
-    List<Feedback> findAllByMasterIdExceptCustomerId(long masterId, long customerId) throws DBException, NotFoundException;
+    List<Feedback> findAllByMasterIdExceptCustomerIdExcludeHidden(long masterId, long customerId) throws DBException, NotFoundException;
 
     List<Feedback> findAll(int offset, int amount, FeedbackSortingParameter sortingParameter, SortingType sortingType
     ) throws DBException, NotFoundException;
 
-    List<Feedback> findAllByMasterIdIncludeHidden(long masterId) throws DBException, NotFoundException;
+    List<Feedback> findAllByMasterId(long masterId) throws DBException, NotFoundException;
 
-    List<Feedback> findAllByMasterId(long masterId, int offset, int amount,
-                                     FeedbackSortingParameter sortingParameter, SortingType sortingType
+    List<Feedback> findAllByMasterIdExcludeHidden(long masterId, int offset, int amount,
+                                                  FeedbackSortingParameter sortingParameter, SortingType sortingType
     ) throws DBException, NotFoundException;
-
-    List<Feedback> findAllByCustomerIdIncludeHidden(long customerId) throws DBException, NotFoundException;
 
     List<Feedback> findAllByCustomerId(long customerId) throws DBException, NotFoundException;
 
-    List<Feedback> findAllByMasterId(long masterId) throws DBException, NotFoundException;
+    List<Feedback> findAllByCustomerIdExcludeHidden(long customerId) throws DBException, NotFoundException;
 
-    List<Feedback> findAllByCustomerId(long customerId, int offset, int amount,
-                                       FeedbackSortingParameter sortingParameter, SortingType sortingType
+    List<Feedback> findAllByMasterIdExcludeHidden(long masterId) throws DBException, NotFoundException;
+
+    List<Feedback> findAllByCustomerIdExcludeHidden(long customerId, int offset, int amount,
+                                                    FeedbackSortingParameter sortingParameter, SortingType sortingType
     ) throws DBException, NotFoundException;
 
     void hide(long feedbackId) throws DBException;
@@ -40,9 +40,9 @@ public interface FeedbackService extends GenericService<Feedback> {
 
     int findCountOfFeedbacks() throws DBException;
 
-    int findCountOfFeedbacksByCustomerId(long customerId) throws DBException;
+    int findCountOfFeedbacksByCustomerIdExcludeHidden(long customerId) throws DBException;
 
-    int findCountOfFeedbacksByMasterId(long masterId) throws DBException;
+    int findCountOfFeedbacksByMasterIdExcludeHidden(long masterId) throws DBException;
 
     int findCountOfFeedbacks(FeedbackFilterParameter filterParam, String filterValue) throws DBException;
 
