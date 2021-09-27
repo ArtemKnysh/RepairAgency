@@ -40,14 +40,21 @@ public abstract class PostCommandWithRedirectionToReferer implements Command {
                 address.append(WebUtil.getAppName(request));
                 address.append(getDefaultAddress(request));
             }
-            processRequest(request);
-            address.append("successMessage=").append(getSuccessMessage(request));
+            processRequest(request, response);
+            Optional<String> successMessage = getSuccessMessage(request);
+            successMessage.ifPresent(s -> address.append("successMessage=").append(s).append("&"));
             for (String parameter : getAdditionalRefererParameters(request)) {
-                address.append("&").append(parameter);
+                address.append(parameter).append("&");
             }
+            address.deleteCharAt(address.length() - 1);
         } catch (Exception e) {
-            getLogger().warn(getErrorMessage(request), e);
-            address.append("errorMessage=").append(getErrorMessage(request));
+            Optional<String> errorMessageOptional = getErrorMessage(request);
+            String errorMessage = e.getMessage();
+            if (errorMessageOptional.isPresent()) {
+                errorMessage = errorMessageOptional.get();
+                address.append("errorMessage=").append(errorMessage);
+            }
+            getLogger().warn(errorMessage, e);
         }
         response.sendRedirect(address.toString());
     }
