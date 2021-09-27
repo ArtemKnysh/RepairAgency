@@ -87,6 +87,9 @@ public class WebUtil {
         String urlParameters = url.substring(endIndexOfUrlPattern + 1);
         for (String parameter : urlParameters.split("&")) {
             String[] parameterNameAndValue = parameter.split("=");
+            if (parameterNameAndValue.length != 2) {
+                continue;
+            }
             String name = parameterNameAndValue[0];
             String value = parameterNameAndValue[1];
             parameters.add(name + "=" + value);
