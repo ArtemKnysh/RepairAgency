@@ -460,6 +460,7 @@ public class RepairRequestServiceTest extends ServiceTest {
             RepairRequest repairRequest1 = createRepairRequest(1, customer.getId());
             repairRequestService.insert(repairRequest1);
             repairRequestService.setMasterToRepairRequest(repairRequest1.getId(), master.getId());
+            repairRequestService.setStatusToRepairRequest(repairRequest1.getId(), RepairRequestStatus.GIVEN_TO_MASTER);
             RepairRequest repairRequest2 = createRepairRequest(2, customer.getId());
             repairRequestService.insert(repairRequest2);
             int countOfRepairRequests = repairRequestService.findCountOfRepairRequestsByMasterIdAndStatusMoreThenPaid(master.getId());
@@ -535,10 +536,12 @@ public class RepairRequestServiceTest extends ServiceTest {
             RepairRequest repairRequest1 = createRepairRequest(1, customer.getId());
             repairRequestService.insert(repairRequest1);
             repairRequestService.setMasterToRepairRequest(repairRequest1.getId(), master.getId());
+            repairRequestService.setStatusToRepairRequest(repairRequest1.getId(), RepairRequestStatus.GIVEN_TO_MASTER);
             repairRequest1 = repairRequestService.findById(repairRequest1.getId());
             RepairRequest repairRequest2 = createRepairRequest(2, customer.getId());
             repairRequestService.insert(repairRequest2);
             repairRequestService.setMasterToRepairRequest(repairRequest2.getId(), master.getId());
+            repairRequestService.setStatusToRepairRequest(repairRequest2.getId(), RepairRequestStatus.GIVEN_TO_MASTER);
             repairRequest2 = repairRequestService.findById(repairRequest2.getId());
             List<RepairRequest> repairRequestsFromDB = repairRequestService.findAllByMasterIdAndStatusMoreThenPaid(master.getId(), 0, 1, RepairRequestSortingParameter.DESCRIPTION, SortingType.DESC);
             assertEquals(1, repairRequestsFromDB.size());
