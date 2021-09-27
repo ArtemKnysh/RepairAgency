@@ -30,7 +30,6 @@ public abstract class PostCommandWithRedirectionToReferer implements Command {
         StringBuilder address = new StringBuilder();
         try {
             String referer = request.getHeader("referer");
-            getLogger().info("referer = " + referer);
             if (referer != null) {
                 address.append(WebUtil.getUrlPatternWithParametersExceptMessages(referer));
                 if (address.charAt(address.length() - 1) != '&') {
