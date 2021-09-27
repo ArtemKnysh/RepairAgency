@@ -7,15 +7,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="localeKeys"/>
+<html lang="${sessionScope.lang}">
+<c:set var="title">
+    <fmt:message key="label.repair_request.list"/>
+</c:set>
 <jsp:include page="/pages/common/layouts/_head.jsp">
-    <jsp:param name="title" value="List Of Repair Requests"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 <body>
 <fileTags:navbarForRole role="${loggedUser.role}" active="${initParam['masterRepairRequestListUrl']}"/>
 <div class="row">
-    <div class="container">
-        <h3 class="text-center">List of repair requests</h3>
+    <div class="container col-md-10">
+        <h3 class="text-center">${title}</h3>
         <hr>
         <c:if test="${successMessage != null}">
             <div class="alert alert-success alert-dismissible">
@@ -34,30 +40,30 @@
             <tr>
                 <th class="col-3">
                     <a href="<fileTags:hrefWithParameters href="${initParam['masterRepairRequestListUrl']}"
-                       page="${currentPage}" sortingParam="description"/>">Description</a>
+                       page="${currentPage}" sortingParam="description"/>"><fmt:message key="label.repair_request.description"/></a>
                     <fileTags:showSortIcon sortingParam="description"/>
                 </th>
                 <th class="col-1">
                     <a href="<fileTags:hrefWithParameters href="${initParam['masterRepairRequestListUrl']}"
-                       page="${currentPage}" sortingParam="cost"/>">Cost</a>
+                       page="${currentPage}" sortingParam="cost"/>"><fmt:message key="label.repair_request.cost"/></a>
                     <fileTags:showSortIcon sortingParam="cost"/>
                 </th>
                 <th class="col-3">
                     <a href="<fileTags:hrefWithParameters href="${initParam['masterRepairRequestListUrl']}"
-                       page="${currentPage}" sortingParam="status"/>">Status</a>
+                       page="${currentPage}" sortingParam="status"/>"><fmt:message key="label.repair_request.status"/></a>
                     <fileTags:showSortIcon sortingParam="status"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['masterRepairRequestListUrl']}"
-                       page="${currentPage}" sortingParam="createdAt"/>">Created At</a>
+                       page="${currentPage}" sortingParam="createdAt"/>"><fmt:message key="label.created_at"/></a>
                     <fileTags:showSortIcon sortingParam="createdAt"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['masterRepairRequestListUrl']}"
-                       page="${currentPage}" sortingParam="customerFullName"/>">Customer</a>
+                       page="${currentPage}" sortingParam="customerFullName"/>"><fmt:message key="label.customer.list"/></a>
                     <fileTags:showSortIcon sortingParam="customerFullName"/>
                 </th>
-                <th>Actions</th>
+                <th class="col-1"><fmt:message key="label.actions"/></th>
             </tr>
             </thead>
             <tbody>
@@ -71,7 +77,7 @@
                                 <form action="${initParam['masterRepairRequestSetStatusUrl']}" method="post">
                                     <input type="hidden" name="repairRequestId" value="${repairRequest.id}"/>
                                     <libTags:selectStatus status="${repairRequest.status}"/>
-                                    <button type="submit" class="form-control btn btn-success">Set status</button>
+                                    <button type="submit" class="form-control btn btn-success"><fmt:message key="label.repair_request.status.set"/></button>
                                 </form>
                             </c:when>
                             <c:otherwise>
@@ -79,7 +85,7 @@
                             </c:otherwise>
                         </c:choose>
                     </td>
-                    <td><c:out value="${repairRequest.createdAt}"/></td>
+                    <td>${libTags:formatLocalDateTime(repairRequest.createdAt)}</td>
                     <td>
                         <a href="${initParam['masterCustomerViewUrl']}?customerId=${repairRequest.customerId}">${repairRequest.customer.fullName}</a>
                     </td>
@@ -87,7 +93,7 @@
                         <div class="form-row">
                             <div class="col mb-1">
                                 <a class="form-control btn btn-primary"
-                                   href="${initParam['masterRepairRequestViewUrl']}?repairRequestId=${repairRequest.id}">Details</a>
+                                   href="${initParam['masterRepairRequestViewUrl']}?repairRequestId=${repairRequest.id}"><fmt:message key="label.details"/></a>
                             </div>
                         </div>
                     </td>

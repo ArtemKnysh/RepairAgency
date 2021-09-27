@@ -7,19 +7,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="localeKeys"/>
+<html lang="${sessionScope.lang}">
+<c:set var="title">
+    <fmt:message key="label.customer.details"/>
+</c:set>
 <jsp:include page="/pages/common/layouts/_head.jsp">
-    <jsp:param name="title" value="Customer Ditails"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 <body>
 <fileTags:navbarForRole role="${loggedUser.role}"/>
 <div class="container col-md-11">
     <div class="card mb-3">
         <div class="card-body">
-            <h1 class="mb-3 text-center">Customer Details</h1>
+            <h1 class="mb-3 text-center">${title}</h1>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6 class="mb-0">Full Name</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.full_name"/></h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                     <c:out value="${customer.fullName}"/>
@@ -28,7 +34,7 @@
             <hr>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6 class="mb-0">Email</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.email"/></h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                     <c:out value="${customer.email}"/>
@@ -37,14 +43,14 @@
             <hr>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6 class="mb-0">Phone Number</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.phone_number"/></h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                     <c:out value="${customer.phoneNumber}"/>
                 </div>
             </div>
             <hr>
-            <h3 class="text-center">List of Feedbacks</h3>
+            <h3 class="text-center"><fmt:message key="label.feedback.list"/></h3>
             <hr>
             <c:if test="${errorMessage != null}">
                 <div class="alert alert-danger alert-dismissible fade show">
@@ -61,16 +67,16 @@
             <table class="table table-bordered table-striped mb-0">
                 <thead>
                 <tr>
-                    <th>Text</th>
-                    <th>Created At</th>
-                    <th>Master</th>
+                    <th><fmt:message key="label.feedback.text"/></th>
+                    <th><fmt:message key="label.created_at"/></th>
+                    <th><fmt:message key="label.master"/></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="feedback" items="${customerFeedbacks}">
                     <tr>
                         <td><c:out value="${feedback.text}"/></td>
-                        <td><c:out value="${feedback.createdAt}"/></td>
+                        <td>${libTags:formatLocalDateTime(feedback.createdAt)}</td>
                         <td>
                             <a href="${initParam['customerMasterViewUrl']}?masterId=${feedback.masterId}">${feedback.master.fullName}</a>
                         </td>

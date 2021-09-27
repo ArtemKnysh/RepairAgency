@@ -7,15 +7,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="localeKeys"/>
+<html lang="${sessionScope.lang}">
+<c:set var="title">
+    <fmt:message key="label.master.list"/>
+</c:set>
 <jsp:include page="/pages/common/layouts/_head.jsp">
-    <jsp:param name="title" value="List Of Masters"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 <body>
 <fileTags:navbarForRole role="${loggedUser.role}" active="${param.masterListUrl}"/>
 <div class="row">
-    <div class="container">
-        <h3 class="text-center">List Of Masters</h3>
+    <div class="container col-md-10">
+        <h3 class="text-center">${title}</h3>
         <hr>
         <c:if test="${errorMessage != null}">
             <div class="alert alert-danger alert-dismissible fade show">
@@ -34,25 +40,25 @@
             <tr>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
-                       sortingParam="firstName"/>">First Name</a>
+                       sortingParam="firstName"/>"><fmt:message key="label.user.first_name"/></a>
                     <fileTags:showSortIcon sortingParam="firstName"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
-                    sortingParam="lastName"/>">Last Name</a>
+                    sortingParam="lastName"/>"><fmt:message key="label.user.last_name"/></a>
                     <fileTags:showSortIcon sortingParam="lastName"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
-                    sortingParam="email"/>">Email</a>
+                    sortingParam="email"/>"><fmt:message key="label.user.email"/></a>
                     <fileTags:showSortIcon sortingParam="email"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${param.masterListUrl}" page="${currentPage}"
-                    sortingParam="phoneNumber"/>">Phone Number</a>
+                    sortingParam="phoneNumber"/>"><fmt:message key="label.user.phone_number"/></a>
                     <fileTags:showSortIcon sortingParam="phoneNumber"/>
                 </th>
-                <th>Actions</th>
+                <th><fmt:message key="label.actions"/></th>
             </tr>
             </thead>
             <tbody>
@@ -66,7 +72,7 @@
                         <div class="form-row">
                             <div class="col mb-1">
                                 <a class="form-control btn btn-primary"
-                                   href="${param.masterViewUrl}?masterId=${master.id}">Details</a>
+                                   href="${param.masterViewUrl}?masterId=${master.id}"><fmt:message key="label.details"/></a>
                             </div>
                         </div>
                     </td>

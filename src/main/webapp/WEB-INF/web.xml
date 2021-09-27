@@ -29,12 +29,20 @@
         <filter-class>com.epam.rd.java.basic.repairagency.web.filter.EncodingFilter</filter-class>
     </filter>
     <filter>
+        <filter-name>DefaultLocaleFilter</filter-name>
+        <filter-class>com.epam.rd.java.basic.repairagency.web.filter.DefaultLocaleFilter</filter-class>
+    </filter>
+    <filter>
         <filter-name>SecurityFilter</filter-name>
         <filter-class>com.epam.rd.java.basic.repairagency.web.filter.SecurityFilter</filter-class>
     </filter>
     <!--    Filters Mapping    -->
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>DefaultLocaleFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     <filter-mapping>
@@ -58,6 +66,14 @@
         <param-name>recordsOnPage</param-name>
         <param-value>5</param-value>
     </context-param>
+    <context-param>
+        <param-name>defaultLang</param-name>
+        <param-value>en</param-value>
+    </context-param>
+    <context-param>
+        <param-name>locales</param-name>
+        <param-value>/WEB-INF/locales.properties</param-value>
+    </context-param>
     <!--    COMMON URLs    -->
     <context-param>
         <param-name>loginUrl</param-name>
@@ -66,6 +82,10 @@
     <context-param>
         <param-name>registrationUrl</param-name>
         <param-value>/RepairAgency/registration</param-value>
+    </context-param>
+    <context-param>
+        <param-name>localeChangeUrl</param-name>
+        <param-value>/RepairAgency/locale/change</param-value>
     </context-param>
     <!--    ADMIN URLs    -->
     <context-param>

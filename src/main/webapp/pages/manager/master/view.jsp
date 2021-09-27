@@ -9,19 +9,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="localeKeys"/>
+<html lang="${sessionScope.lang}">
+<c:set var="title">
+    <fmt:message key="label.master.details"/>
+</c:set>
 <jsp:include page="/pages/common/layouts/_head.jsp">
-    <jsp:param name="title" value="Master Ditails"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 <body>
 <fileTags:navbarForRole role="${loggedUser.role}"/>
 <div class="container col-md-11">
     <div class="card mb-3">
         <div class="card-body">
-            <h1 class="mb-3 text-center">Master Details</h1>
+            <h1 class="mb-3 text-center">${title}</h1>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6 class="mb-0">Full Name</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.full_name"/></h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                     <c:out value="${master.fullName}"/>
@@ -30,7 +36,7 @@
             <hr>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6 class="mb-0">Email</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.email"/></h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                     <c:out value="${master.email}"/>
@@ -39,7 +45,7 @@
             <hr>
             <div class="row">
                 <div class="col-sm-3">
-                    <h6 class="mb-0">Phone Number</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.phone_number"/></h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                     <c:out value="${master.phoneNumber}"/>
@@ -61,27 +67,27 @@
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a class="nav-link <c:if test="${activeTab == 'repairRequests'}">active</c:if>" data-toggle="tab"
-                       href="#repairRequests">Repair Requests</a>
+                       href="#repairRequests"><fmt:message key="label.repair_requests"/></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <c:if test="${activeTab == 'feedbacks'}">active</c:if>" data-toggle="tab"
-                       href="#feedbacks">Feedbacks</a>
+                       href="#feedbacks"><fmt:message key="label.feedbacks"/></a>
                 </li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane fade <c:if test="${activeTab == 'repairRequests'}">active show</c:if>"
                      id="repairRequests">
-                    <h3 class="text-center mt-3">List of Repair Requests</h3>
+                    <h3 class="text-center mt-3"><fmt:message key="label.repair_request.list"/></h3>
                     <hr>
                     <table class="table table-bordered table-striped mb-0">
                         <thead>
                         <tr>
-                            <th class="col-2">Description</th>
-                            <th>Cost</th>
-                            <th class="col-2">Status</th>
-                            <th>Created at</th>
-                            <th>Customer</th>
-                            <th>Actions</th>
+                            <th class="col-2"><fmt:message key="label.repair_request.description"/></th>
+                            <th><fmt:message key="label.repair_request.cost"/></th>
+                            <th class="col-2"><fmt:message key="label.repair_request.status"/></th>
+                            <th><fmt:message key="label.created_at"/></th>
+                            <th><fmt:message key="label.customer"/></th>
+                            <th><fmt:message key="label.actions"/></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -92,13 +98,10 @@
                                     <c:choose>
                                         <c:when test="${libTags:isRepairRequestCostCanBeChangedByRole(repairRequest, loggedUser.role)}">
                                             <form action="${initParam['managerRepairRequestSetCostUrl']}" method="post">
-                                                <input type="hidden" name="repairRequestId"
-                                                       value="${repairRequest.id}"/>
+                                                <input type="hidden" name="repairRequestId" value="${repairRequest.id}"/>
                                                 <input type="number" name="cost" class="form-control mb-2" step="any"
-                                                       min="0"
-                                                       value="${repairRequest.cost}"/>
-                                                <button type="submit" class="form-control btn btn-success">Set cost
-                                                </button>
+                                                       min="0" value="${repairRequest.cost}"/>
+                                                <button type="submit" class="form-control btn btn-success"><fmt:message key="label.repair_request.cost.set"/></button>
                                             </form>
                                         </c:when>
                                         <c:otherwise>
@@ -111,11 +114,9 @@
                                         <c:when test="${libTags:isRepairRequestStatusCanBeChangedByRole(repairRequest, loggedUser.role)}">
                                             <form action="${initParam['managerRepairRequestSetStatusUrl']}"
                                                   method="post">
-                                                <input type="hidden" name="repairRequestId"
-                                                       value="${repairRequest.id}"/>
+                                                <input type="hidden" name="repairRequestId" value="${repairRequest.id}"/>
                                                 <libTags:selectStatus status="${repairRequest.status}"/>
-                                                <button type="submit" class="form-control btn btn-success">Set status
-                                                </button>
+                                                <button type="submit" class="form-control btn btn-success"><fmt:message key="label.repair_request.status.set"/></button>
                                             </form>
                                         </c:when>
                                         <c:otherwise>
@@ -123,7 +124,7 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
-                                <td><c:out value="${repairRequest.createdAt}"/></td>
+                                <td>${libTags:formatLocalDateTime(repairRequest.createdAt)}</td>
                                 <td>
                                     <a href="${initParam['managerCustomerViewUrl']}?customerId=${repairRequest.customerId}">${repairRequest.customer.fullName}</a>
                                 </td>
@@ -131,7 +132,7 @@
                                     <div class="form-row">
                                         <div class="col mb-1">
                                             <a class="form-control btn btn-primary"
-                                               href="${initParam['managerRepairRequestViewUrl']}?repairRequestId=${repairRequest.id}">Details</a>
+                                               href="${initParam['managerRepairRequestViewUrl']}?repairRequestId=${repairRequest.id}"><fmt:message key="label.details"/></a>
                                         </div>
                                         <c:if test="${libTags:isRepairRequestMasterCanBeChangedByRole(repairRequest, loggedUser.role)}">
                                             <div class="col mb-1">
@@ -139,7 +140,7 @@
                                                       method="post">
                                                     <input type="hidden" name="repairRequestId"
                                                            value="${repairRequest.id}"/>
-                                                    <button type="submit" class="form-control btn btn-danger">Remove
+                                                    <button type="submit" class="form-control btn btn-danger"><fmt:message key="label.repair_request.master.remove"/>
                                                     </button>
                                                 </form>
                                             </div>
@@ -152,22 +153,22 @@
                     </table>
                 </div>
                 <div class="tab-pane fade <c:if test="${activeTab == 'feedbacks'}">active show</c:if>" id="feedbacks">
-                    <h3 class="text-center mt-3">List of Feedbacks</h3>
+                    <h3 class="text-center mt-3"><fmt:message key="label.feedback.list"/></h3>
                     <hr>
                     <table class="table table-bordered table-striped mb-0">
                         <thead>
                         <tr>
-                            <th>Text</th>
-                            <th>Created At</th>
-                            <th>Customer</th>
-                            <th>Actions</th>
+                            <th><fmt:message key="label.feedback.text"/></th>
+                            <th><fmt:message key="label.created_at"/></th>
+                            <th><fmt:message key="label.customer"/></th>
+                            <th><fmt:message key="label.actions"/></th>
                         </tr>
                         </thead>
                         <tbody>
                         <c:forEach var="feedback" items="${masterFeedbacks}">
                             <tr>
                                 <td><c:out value="${feedback.text}"/></td>
-                                <td><c:out value="${feedback.createdAt}"/></td>
+                                <td>${libTags:formatLocalDateTime(feedback.createdAt)}</td>
                                 <td>
                                     <a href="${initParam['managerCustomerViewUrl']}?customerId=${feedback.customerId}">${feedback.customer.fullName}</a>
                                 </td>
@@ -179,17 +180,14 @@
                                                     <form action="${initParam['managerFeedbackShowUrl']}" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.id}"/>
                                                         <input type="hidden" name="activeTab" value="feedbacks"/>
-                                                        <button type="submit" class="form-control btn btn-primary">
-                                                            Show
-                                                        </button>
+                                                        <button type="submit" class="form-control btn btn-primary"><fmt:message key="label.feedback.show"/></button>
                                                     </form>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <form action="${initParam['managerFeedbackHideUrl']}" method="post">
                                                         <input type="hidden" name="feedbackId" value="${feedback.id}"/>
                                                         <input type="hidden" name="activeTab" value="feedbacks"/>
-                                                        <button type="submit" class="form-control btn btn-danger">Hide
-                                                        </button>
+                                                        <button type="submit" class="form-control btn btn-danger"><fmt:message key="label.feedback.hide"/></button>
                                                     </form>
                                                 </c:otherwise>
                                             </c:choose>

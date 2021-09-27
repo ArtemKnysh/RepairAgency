@@ -7,15 +7,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="localeKeys"/>
+<html lang="${sessionScope.lang}">
+<c:set var="title">
+    <fmt:message key="label.user.list"/>
+</c:set>
 <jsp:include page="/pages/common/layouts/_head.jsp">
-    <jsp:param name="title" value="List Of Users"/>
+    <jsp:param name="title" value="${title}"/>
 </jsp:include>
 <body>
 <fileTags:navbarForRole role="${loggedUser.role}" active="${initParam['adminUserListUrl']}"/>
 <div class="row">
-    <div class="container">
-        <h3 class="text-center">List of users</h3>
+    <div class="container col-md-10">
+        <h3 class="text-center">${title}</h3>
         <hr>
         <c:if test="${errorMessage != null}">
             <div class="alert alert-danger alert-dismissible fade show">
@@ -34,32 +40,32 @@
             <tr>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                       sortingParam="firstName"/>">First Name</a>
+                       sortingParam="firstName"/>"><fmt:message key="label.user.first_name"/></a>
                     <fileTags:showSortIcon sortingParam="firstName"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="lastName"/>">Last Name</a>
+                    sortingParam="lastName"/>"><fmt:message key="label.user.last_name"/></a>
                     <fileTags:showSortIcon sortingParam="lastName"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="email"/>">Email</a>
+                    sortingParam="email"/>"><fmt:message key="label.user.email"/></a>
                     <fileTags:showSortIcon sortingParam="email"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="phoneNumber"/>">Phone Number</a>
+                    sortingParam="phoneNumber"/>"><fmt:message key="label.user.phone_number"/></a>
                     <fileTags:showSortIcon sortingParam="phoneNumber"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="createdAt"/>">Created At</a>
+                    sortingParam="createdAt"/>"><fmt:message key="label.created_at"/></a>
                     <fileTags:showSortIcon sortingParam="createdAt"/>
                 </th>
                 <th>
                     <a href="<fileTags:hrefWithParameters href="${initParam['adminUserListUrl']}" page="${currentPage}"
-                    sortingParam="roleName"/>">Role</a>
+                    sortingParam="roleName"/>"><fmt:message key="label.user.role"/></a>
                     <fileTags:showSortIcon sortingParam="roleName"/>
                 </th>
             </tr>
@@ -71,12 +77,12 @@
                     <td><c:out value="${customer.lastName}"/></td>
                     <td><c:out value="${customer.email}"/></td>
                     <td><c:out value="${customer.phoneNumber}"/></td>
-                    <td><c:out value="${customer.createdAt}"/></td>
+                    <td>${libTags:formatLocalDateTime(customer.createdAt)}</td>
                     <td class="form-group">
                         <form action="${initParam['adminUserSetRoleUrl']}" method="post">
                             <libTags:selectRole role="${customer.role}"/>
                             <input type="hidden" name="userId" value="<c:out value='${customer.id}'/>"/>
-                            <button type="submit" class="form-control btn btn-success">Set role</button>
+                            <button type="submit" class="form-control btn btn-success"><fmt:message key="label.admin.users.set_role"/></button>
                         </form>
                     </td>
                 </tr>

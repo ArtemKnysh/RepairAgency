@@ -8,7 +8,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fileTags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="libTags" uri="http://com.epam.rd.java.basic.repairagency/lib" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang}"/>
+<fmt:setBundle basename="localeKeys"/>
+<html lang="${sessionScope.lang}">
 <jsp:include page="/pages/common/layouts/_head.jsp">
     <jsp:param name="title" value="${param.title}"/>
 </jsp:include>
@@ -22,12 +25,12 @@
                     <h1>${param.title}</h1>
                 </div>
                 <div class="col-3 pt-2">
-                    <a class="form-control btn btn-primary" href="${param.userEditUrl}">Edit</a>
+                    <a class="form-control btn btn-primary" href="${param.userEditUrl}"><fmt:message key="label.edit"/></a>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <h6 class="mb-0">Full Name</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.full_name"/></h6>
                 </div>
                 <div class="col-sm-8 text-secondary">
                     <c:out value="${loggedUser.fullName}"/>
@@ -36,7 +39,7 @@
             <hr>
             <div class="row">
                 <div class="col-sm-4">
-                    <h6 class="mb-0">Email</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.email"/></h6>
                 </div>
                 <div class="col-sm-8 text-secondary">
                     <c:out value="${loggedUser.email}"/>
@@ -45,18 +48,18 @@
             <hr>
             <div class="row">
                 <div class="col-sm-4">
-                    <h6 class="mb-0">Phone Number</h6>
+                    <h6 class="mb-0"><fmt:message key="label.user.phone_number"/></h6>
                 </div>
                 <div class="col-sm-8 text-secondary">
                     <c:out value="${loggedUser.phoneNumber}"/>
                 </div>
             </div>
             <hr>
-            <h3 class="text-center">Account Details</h3>
+            <h3 class="text-center"><fmt:message key="label.account_details"/></h3>
             <hr>
             <div class="row">
                 <div class="col-sm-4">
-                    <h6 class="mb-0">Account Balance</h6>
+                    <h6 class="mb-0"><fmt:message key="label.account_details.balance"/></h6>
                 </div>
                 <div class="col-sm-8 text-secondary">
                     <c:out value="${balance}"/>
@@ -68,7 +71,7 @@
                     <input type="number" name="amount" class="form-control" step="any" min="1" value="1"/>
                 </div>
                 <div class="col-sm-4">
-                    <button type="submit" class="form-control btn btn-success">Top-up</button>
+                    <button type="submit" class="form-control btn btn-success"><fmt:message key="label.account_details.top_up"/></button>
                 </div>
             </form>
             <hr>
@@ -89,12 +92,12 @@
                 <tr>
                     <th>
                         <a href="<fileTags:hrefWithParameters href="${param.userViewUrl}" page="${currentPage}"
-                           sortingParam="amount"/>">Amount</a>
+                           sortingParam="amount"/>"><fmt:message key="label.account_details.amount"/></a>
                         <fileTags:showSortIcon sortingParam="amount"/>
                     </th>
                     <th>
                         <a href="<fileTags:hrefWithParameters href="${param.userViewUrl}" page="${currentPage}"
-                           sortingParam="createdAt"/>">Created At</a>
+                           sortingParam="createdAt"/>"><fmt:message key="label.created_at"/></a>
                         <fileTags:showSortIcon sortingParam="createdAt"/>
                     </th>
                 </tr>
@@ -103,7 +106,7 @@
                 <c:forEach var="accountTransaction" items="${entities}">
                     <tr>
                         <td><c:out value="${accountTransaction.amountWithSign}"/></td>
-                        <td><c:out value="${accountTransaction.createdAt}"/></td>
+                        <td>${libTags:formatLocalDateTime(accountTransaction.createdAt)}</td>
                     </tr>
                 </c:forEach>
                 </tbody>
